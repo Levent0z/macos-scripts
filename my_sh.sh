@@ -36,6 +36,18 @@ function echoColor() {
     echo "$1${@:2}$NOCOLOR"
 }
 
+function exists() {
+    which "$1" >/dev/null # returns 1 if not found
+}
+
+function exitIfFailed() {
+    RETVAL=$?
+    if [[ "$RETVAL" != "0" ]]; then
+        echo 'Failed.'
+        exit $RETVAL
+    fi
+}
+
 function findstr() {
     grep -r "$1" .
 }
