@@ -1,0 +1,8 @@
+MY_PATH="$HOME/github/levent0z/macos-scripts"
+source "$MY_PATH/my_sh.sh"
+source "$MY_PATH/my_net.sh"
+which fzf >/dev/null && source "$MY_PATH/my_fzf.sh"
+which npm >/dev/null && source "$MY_PATH/npmcompletion.sh"
+source "$MY_PATH/my_git.sh"
+source "$MY_PATH/my_dev.sh"
+which corecli >/dev/null && source "$MY_PATH/my_core.sh"
