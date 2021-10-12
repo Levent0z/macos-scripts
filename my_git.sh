@@ -69,14 +69,8 @@ function git_branch_text() {
 # Use a specific SSH file when pushing to git
 function gitSsh() {
   if [ -z $1 ]; then
-    ARG=l0z_id_rsa
-  else
-    ARG=$1
+    echo "Please specify the name of the private SSH file under $HOME/.ssh"
+    return 1
   fi
-  export GIT_SSH_COMMAND="ssh -i /Users/loz/.ssh/$ARG"
-}
-
-function init4me() {
-  git config --local user.name 'Levent Oz'
-  git config --local user.email 'leventoz.dev@gmail.com'
+  export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/$1"
 }

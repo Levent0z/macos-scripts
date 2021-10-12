@@ -6,7 +6,7 @@ alias studio='open /Applications/Android\ Studio.app/Contents/MacOS/studio'
 alias wemu='emu -avd Pixel3XLAPI28_3 -writable-system'
 
 # heroku autocomplete setup
-#HEROKU_AC_BASH_SETUP_PATH=/Users/loz/Library/Caches/heroku/autocomplete/bash_setup && test -f $HEROKU_AC_BASH_SETUP_PATH && source $HEROKU_AC_BASH_SETUP_PATH;
+#HEROKU_AC_BASH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/bash_setup && test -f $HEROKU_AC_BASH_SETUP_PATH && source $HEROKU_AC_BASH_SETUP_PATH;
 
 # IDEA
 alias ideace='open "/Applications/IntelliJ IDEA CE.app"'
