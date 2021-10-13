@@ -14,6 +14,8 @@ alias wrapon='tput smam'  #word-wrap enable
 # Not needed in zsh
 # export PS1="\n\[\e[1;37m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]\$(git_branch_text)\n\[\e[1;36m\]o>\[\e[0;37m\]"
 
+# These foreground colors are based on standard color modes
+# https://en.wikipedia.org/wiki/ANSI_escape_code
 export NOCOLOR='\033[0m'
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
@@ -30,6 +32,24 @@ export LIGHTBLUE='\033[1;34m'
 export LIGHTPURPLE='\033[1;35m'
 export LIGHTCYAN='\033[1;36m'
 export WHITE='\033[1;37m'
+
+# These are from the ANSI-defined 256-color lookup table
+function colorBg256 () {
+    printf '\033[48;5;%dm' $1
+}
+function colorBgRgb () {
+    printf '\033[48;2;%d;%d;%dm' $1 $2 $3
+}
+function colorFg256() {
+    printf '\033[38;5;%dm' $1
+}
+function colorFgRgb() {
+    printf '\033[38;2;%d;%d;%dm' $1 $2 $3
+}
+function colorReset() {
+    printf "$NOCOLOR"
+}
+
 
 function echoColor() {
     # Specify first argument as the color, second argument as the line
@@ -87,4 +107,8 @@ function lsx() {
         isFolder "$LINE" || echo "$LINE"
     done <<<$RESULT
     return 0
+}
+
+function md() {
+    mkdir -p "$1" && pushd "$1"
 }
