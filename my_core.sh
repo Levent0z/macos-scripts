@@ -39,6 +39,11 @@ function appchanged() {
     tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep "changed due to: CHANGE"
 }
 
+function corelogs() {
+    LOC=$(dirname "$0")
+    tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grcat "$LOC/config/conf.sfcore"
+}
+
 function cclog() {
     [[ -z $1 ]] && rank=1 || rank=$1
     cat ~/.corecli.logs/latest/$(ls -1 ~/.corecli.logs/latest | sort -r | tail +$rank | head -1)

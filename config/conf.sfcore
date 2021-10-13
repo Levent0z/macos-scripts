@@ -1,0 +1,121 @@
+# this configuration file is suitable for displaying kernel log files
+
+
+# example of text substitution
+#regexp=\bda?emon
+#replace=angel
+#colours=red
+#======
+# example of text substitution
+#regexp=(\d\d):(\d\d):(\d\d)
+#replace=\1h\2m\3s
+#======
+
+
+# DOCUMENTATION
+# -------------
+# https://github.com/garabik/grc
+
+# REGEX
+# ------
+# Python doesn't support certain regex constructs (e.g. Atomic group)
+# Use https://regex101.com/ to make sense of the regexps
+
+# COLOURS
+# -------
+# Keywords: none, default, bold, underline, blink, reverse, concealed, beep,
+#           black,    green,    yellow,    blue,    magenta,    cyan,    white,
+#           on_black, on_green, on_yellow, on_blue, on_magenta, on_cyan, on_white
+
+# You can also specify quoted strings for ANSI colors:
+# Foreground 256-color, mapped: "\033[38;5;%dm"       where %d is a placeholder
+# Foreground RGB              : "\033[38;2;%d;%d;%dm" where %d are placeholders for r,g,b respectively
+# Background 256-colo,r mapped: "\033[48;5;%dm"       where %d is a placeholder
+# Background RGB              : "\033[48;2;%d;%d;%dm" where %d are placeholders for r,g,b respectively
+#
+# Examples:
+# - soft gray foreground = "\033[38;2;178;178;178m"
+# - soft yellow foreground = "\033[38;2;243;250;71m"
+# - soft green foreground = "\033[38;2;86;255;175m"
+# - soft blue foreground = "\033[38;2;111;223;246m"
+# - soft pink foreground = "\033[38;2;255;140;195m"
+
+# count is one of words: once, more, stop, previous, block or unblock
+# - once means that if the regexp is matched, its first occurrence is coloured and the program will continue with other regexp's.
+# - more means that if there are multiple matches of the regexp in one line, all of them will be coloured.
+# - stop means that the regexp will be coloured and program will move to the next line (i.e. ignoring other regexp's)
+# - previous means the count will be the same as for the previous line
+# - block marks a start of a multiline block of text, coloured with the same colour
+# - unblock, obviously, marks the end of such a block
+
+======
+# Log record type
+regexp=^(\w+)`
+colours=white on_blue
+count=once
+======
+# Cause
+regexp=Caused by:|Cause\d+
+colours=white on_red
+count=more
+======
+regexp=(BUILD )?SUCCESS(FUL)?|A P P    R E A D Y
+colours=white on_red
+count=once
+======
+# Warning
+regexp=[Ww][Aa][Rr][Nn][Ii][Nn][Gg][Ss]?
+# dark gray over orangish yellow
+colours="\033[38;2;76;76;76m" "\033[48;2;255;202;73m"
+count=more
+======
+regexp=(/?[\w\.\-~]+/)+([\w\.\-~]+)*
+#soft blue
+colours="\033[38;2;111;223;246m"
+count=more
+======
+#regexp=(?>([\w\!-]*\.)+[\w\!-]+)(?!\/)
+regexp=([\w\!-]*\.)+[\w\!-]+
+#soft green
+colours="\033[38;2;86;255;175m"
+count=more
+======
+# URL
+regexp=[A-Za-z]+://\S+
+#soft pink
+colours="\033[38;2;255;140;195m"
+count=more
+======
+# Error
+regexp=([Ee][Rr][Rr][Oo][Rr][Ss]?)(?![Ss]?\:\s*0)
+# soft yellow
+colours="\033[38;2;243;250;71m" on_red
+count=more
+======
+# Fail(ed) (but not "Failed: 0")
+regexp=([Ff][Aa][Ii][Ll]([Ee][Dd])?)(?!\:\s*0)
+# soft yellow
+colours="\033[38;2;243;250;71m" on_red
+count=more
+=====
+# Failure(s) (but not "Failure(s): 0)
+regexp=([Ff][Aa][Ii][Ll][Uu][Rr][Ee][Ss]?)(?![Ss]?\:\s*0)
+# soft yellow
+colours="\033[38;2;243;250;71m" on_red
+count=more
+======
+# Unable
+regexp=[Uu][Nn][Aa][Bb][Ll][Ee]
+# soft yellow
+colours="\033[38;2;243;250;71m" on_red
+count=more
+======
+# Exception(s)
+regexp=[Ee][Xx][Cc][Ee][Pp][Tt][Ii][Oo][Nn][Ss]?
+# soft yellow
+colours="\033[38;2;243;250;71m" on_red
+count=more
+======
+# Stack traces
+regexp=^\s+at\s.*$
+colors=black "\033[48;2;178;178;178m"
