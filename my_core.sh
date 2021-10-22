@@ -1,9 +1,6 @@
 # Get latest changelist
 alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
-alias codepom='code ~/blt/app/main/core/pom.xml'
-alias codews='code ~/blt/app/main/core/workspace-user.xml'
-
 # Aura
 alias ax='node ./aura-util/src/test/tools/xUnit/xUnit.js.Console.js /dependency:./aura-util/src/test/tools/xUnit/dependencies ./aura-impl/src/test/javascript' #run this from the root aura folder:
 alias amod='chmod 666 ~/git/loz/aura/aura-resources/target/classes/aura/javascript/*; ll ~/git/loz/aura/aura-resources/target/classes/aura/javascript/*'
@@ -18,7 +15,15 @@ alias jh1_292='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk1.
 alias jh1_308='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk1.8.0.302_8.56.0.22.jdk/Contents/Home/'
 alias jhzulu8='export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/'
 alias jh11='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk_11.0.9.1_11.43.62.jdk/Contents/Home/'
-alias jhlatest='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk_11.0.9.1_11.43.62.jdk/Contents/Home/'
+alias jhl='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk_11.0.9.1_11.43.62.jdk/Contents/Home/' # latest
+
+# Maven
+alias codemvnlogs='code ~/.corecli.logs/mvn:mvn'
+alias codepom='code ~/blt/app/main/core/pom.xml'
+alias codews='code ~/blt/app/main/core/workspace-user.xml'
+alias coremvn='corecli mvn:mvn -- ' # specify additional args directly to maven
+alias coremvni='corecli mvn:mvn -- com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea'
+alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea' # applies to main
 
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build'
@@ -27,9 +32,13 @@ alias pdlogs='pushd ~/blt/app/main/core/sfdc/logs/sfdc'
 
 alias pdgatesd='pushd ~/blt/app/main/core/sfdc/config/gater/dev/gates'
 
+alias pdm2='pushd ~/.m2/repository/com/salesforce/services/instrumentation'
+
 alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components'
 alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api'
 alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl'
+
+LOC=$(dirname "$0")
 
 function appready() {
     tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep "A P P    R E A D Y"
@@ -40,8 +49,48 @@ function appchanged() {
 }
 
 function corelogs() {
-    LOC=$(dirname "$0")
     tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grcat "$LOC/config/conf.sfcore"
+}
+
+function coreCiStatus {
+    WHOAMI=$(whoami) && open "https://portal.prod.ci.sfdc.net/?autobuilds=&users=$WHOAMI"
+}
+
+function coreeslint() {
+    [[ -z $1 ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
+    corecli mvn:mvn -- tools:eslint-lwc -pl "$1"
+}
+
+function coreeslintQuick() {
+    # Note: this is using a hard-coded version of eslint-tool, need to run the non-quick way to update it
+    [[ -z $1 ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
+
+    pushd /Users/loz/tools/eslint-tool/2.0.5 >/dev/null
+    /Users/loz/tools/eslint-tool/2.0.5/node/node-v14.15.1-darwin-x64/bin/node ./node_modules/eslint/bin/eslint.js \
+        --no-color --max-warnings 0 \
+        "/Users/loz/blt/app/main/core/$1/modules"
+    # --ignore-pattern **/modules/force/adsBridge/adsBridge.js \
+    # --ignore-pattern **/modules/native/ldsEngineMobile/ldsEngineMobile.js \
+    # --ignore-pattern **/modules/native/ldsWorkerApi/ldsWorkerApi.js \
+    # --ignore-pattern **/modules/force/lds*/** \
+    # --ignore-pattern **/modules/visualEditor/jQuery/jQueryLib.js \
+    # --ignore-pattern **/modules/visualEditor/jQuery/jQueryUILib.js
+    popd >/dev/null
+}
+
+function coreResubmitCodeReviewStage() {
+    # Submits to Code Review Stage Testing (CRST)
+    [[ -z $1 ]] && echo 'Please specify the changelist name (check Pending in p4v)' && return 1
+    corecli crst:submit -c $1
+}
+
+function ccli() {
+    ALLARGS=$*
+    pushd "$HOME/blt/app/main/core"
+    corecli $ALLARGS
+    RETVAL=$?
+    popd
+    return $RETVAL
 }
 
 function cclog() {

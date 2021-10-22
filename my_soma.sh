@@ -21,3 +21,9 @@ alias tokpush='GIT_SSH_COMMAND="ssh -i ~/.ssh/tok_lp_robot_rsa" git push'
 #    export KNAMESPACE=instrumentation
 #    source $MY_GIT_ORG/hightower-client/kubeutils.sh >/dev/null
 #fi
+
+function nexusNpm() {
+    # https://git.soma.salesforce.com/nodeforce/nexus-npms
+    # Sets up your computer to use Salesforce Nexus registries (public proxy and internal) for npm, Yarn Classic, and Yarn 2.
+    curl -k https://git.soma.salesforce.com/pages/nodeforce/nexus-npms/dist/installer.js | node
+}

@@ -1,6 +1,8 @@
 # This script will attempt to install brew and a number of CLI tools via brew.
 echo 'This script will attempt to install CLI tools.'
 
+LOC=$(dirname "$0")
+
 function exitIfFailed() {
     RETVAL=$?
     if [[ "$RETVAL" != "0" ]]; then
@@ -23,7 +25,6 @@ function installNotify() {
     read -p 'Install notify: a simple script to do notifications? (y/n) ' RESP
     [[ "$RESP" != 'y' ]] && return
 
-    LOC=$(dirname "$0")
     cp "$LOC/notify" /usr/local/bin/
     exitIfFailed
 }

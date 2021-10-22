@@ -15,10 +15,12 @@ alias ideareset='rm -rf .idea && rm -rf .ijwb'
 # Java
 alias ejh='echo $JAVA_HOME'
 alias jhclear='unset JAVA_HOME'
+alias usjh='unset JAVA_HOME'
 
 # Maven
 alias em2='echo $M2_HOME'
 alias m2clear='unset M2_HOME'
+alias usm2='unset M2_HOME'
 alias m2354="export M2_HOME='$HOME/sdk/apache-maven-3.5.4'"
 alias m2360="export M2_HOME='$HOME/sdk/apache-maven-3.6.0'"
 alias m2362="export M2_HOME='$HOME/sdk/apache-maven-3.6.2'"

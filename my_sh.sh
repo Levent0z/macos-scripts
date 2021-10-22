@@ -1,5 +1,10 @@
 alias bp='code ~/.bash_profile'
 alias cd..='cd ..'
+alias cd1='pushd ..'
+alias cd2='pushd ../..'
+alias cd3='pushd ../../..'
+alias cd4='pushd ../../../..'
+alias cd5='pushd ../../../../..'
 alias codez='code ~/.zshrc'
 alias ll='ls -hpGoAtr' # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
 #Also see lsx function below
