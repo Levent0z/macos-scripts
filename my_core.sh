@@ -24,6 +24,7 @@ alias codews='code ~/blt/app/main/core/workspace-user.xml'
 alias coremvn='corecli mvn:mvn -- ' # specify additional args directly to maven
 alias coremvni='corecli mvn:mvn -- com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea'
 alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea' # applies to main
+alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
 
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build'
