@@ -29,6 +29,7 @@ alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build'
 alias pdcore='pushd ~/blt/app/main/core'
+alias pd236='pushd ~/blt/app/236/patch/core'
 alias pdlogs='pushd ~/blt/app/main/core/sfdc/logs/sfdc'
 
 alias pdgatesd='pushd ~/blt/app/main/core/sfdc/config/gater/dev/gates'
@@ -38,6 +39,8 @@ alias pdm2='pushd ~/.m2/repository/com/salesforce/services/instrumentation'
 alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components'
 alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api'
 alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl'
+
+alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog)|(uxact)|(uxerr)|(uxevt)|(3pcml)|(ailtn)|(aiuim)"'
 
 LOC=$(dirname "$0")
 
