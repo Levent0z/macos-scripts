@@ -1,12 +1,20 @@
 # Get latest changelist
 alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
+# Core start/stop
+alias cs='pushd ~/blt/app/main/core >/dev/null && corecli core:start --no-honu-log; popd >/dev/null'
+alias cx='pushd ~/blt/app/main/core >/dev/null && corecli core:stop; popd >/dev/null'
+alias ci='pushd ~/blt/app/main/core >/dev/null && corecli ide:intellij; popd >/dev/null'
+
 # Aura
 alias ax='node ./aura-util/src/test/tools/xUnit/xUnit.js.Console.js /dependency:./aura-util/src/test/tools/xUnit/dependencies ./aura-impl/src/test/javascript' #run this from the root aura folder:
 alias amod='chmod 666 ~/git/loz/aura/aura-resources/target/classes/aura/javascript/*; ll ~/git/loz/aura/aura-resources/target/classes/aura/javascript/*'
 
 # Docker
 alias dra='docker run -it --rm ops0-artifactrepo1-0-prd.data.sfdc.net'
+
+# Init JAVA_HOME and M2_HOME based on what CoreCli uses
+alias initj='pushd "$HOME/blt/app/main/core" >/dev/null && for LINE in `corecli env | grep -e "^JAVA_HOME=" -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME && echo M2_HOME=$M2_HOME'
 
 # Java
 alias ejhc='corecli env | grep -e ^JAVA_HOME'
@@ -25,17 +33,16 @@ alias coremvn='corecli mvn:mvn -- ' # specify additional args directly to maven
 alias coremvni='corecli mvn:mvn -- com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea'
 alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea' # applies to main
 alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
+alias m2core='export M2_HOME=${HOME}/blt/app/main/core/build/apache-maven'
 
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build'
 alias pdcore='pushd ~/blt/app/main/core'
 alias pd236='pushd ~/blt/app/236/patch/core'
 alias pdlogs='pushd ~/blt/app/main/core/sfdc/logs/sfdc'
-
+alias pdext='pushd ~/blt/app/main/core/ext'
 alias pdgatesd='pushd ~/blt/app/main/core/sfdc/config/gater/dev/gates'
-
 alias pdm2='pushd ~/.m2/repository/com/salesforce/services/instrumentation'
-
 alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components'
 alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api'
 alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl'
