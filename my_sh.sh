@@ -117,3 +117,12 @@ function lsx() {
 function md() {
     mkdir -p "$1" && pushd "$1"
 }
+
+function flatSize() {
+    # Returns the total size of the immediate folders
+    for A in $(ls -1p | grep -e "/$"); do
+        pushd "$A" >/dev/null
+        find . -type f -print0 | xargs -0 stat -f %z | awk '{t+=$1}END{print ENVIRON["PWD"],t}'
+        popd >/dev/null
+    done
+}

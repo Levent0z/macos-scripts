@@ -14,7 +14,7 @@ alias amod='chmod 666 ~/git/loz/aura/aura-resources/target/classes/aura/javascri
 alias dra='docker run -it --rm ops0-artifactrepo1-0-prd.data.sfdc.net'
 
 # Init JAVA_HOME and M2_HOME based on what CoreCli uses
-alias initj='pushd "$HOME/blt/app/main/core" >/dev/null && for LINE in `corecli env | grep -e "^JAVA_HOME=" -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME && echo M2_HOME=$M2_HOME'
+alias initj='pushd "$HOME/blt/app/main/core" >/dev/null && for LINE in `corecli show-env | grep -e "^JAVA_HOME=" -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME && echo M2_HOME=$M2_HOME'
 
 # Java
 alias ejhc='corecli env | grep -e ^JAVA_HOME'
