@@ -3,6 +3,9 @@ alias gs='git status'
 alias nogpg='git config commit.gpgsign false'
 alias pdgithub='pushd ~/github'
 
+## Use "gh prs" to show open PRs using GitHub CLI
+which gh >/dev/null && gh alias set prs "api -X GET search/issues  -f q='is:open, author:$(whoami), is:pr' --jq '.items[].html_url'" >/dev/null
+
 ## Git log with optional args
 function gl() {
   if [ -z $1 ]; then
@@ -73,4 +76,12 @@ function gitSsh() {
     return 1
   fi
   export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/$1"
+}
+
+function gitWho() {
+    echo "user.name: `git config --get user.name`"
+    echo "user.email: `git config --get user.email`"
+    echo "GIT_SSH_COMMAND=$GIT_SSH_COMMAND"
+    [[ -z "$GIT_SSH_COMMAND" ]] && echo 'Use "gitSsh filename" to set GIT_SSH_COMMAND env variable'
+    return 0
 }
