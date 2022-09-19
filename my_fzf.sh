@@ -17,23 +17,23 @@ export FZF_DEFAULT_OPTS="--height 50% -1 --reverse --multi --inline-info --previ
 #export FZF_ALT_C_COMMAND="fs --type d $FD_OPTIONS"
 
 function fullpath() {
-  f1=$(fzf -q$1 | xargs)
-  f2=$(pwd)/${f1}
-  echo $(dirname ${f2})
+    f1=$(fzf -q$1 | xargs)
+    f2=$(pwd)/${f1}
+    echo $(dirname ${f2})
 }
 
 ## DEPRECATED alias pd='pushd `fzf | xargs dirname`'
 # "pushd"
 function pd() {
-  if [ -z $1 ]; then
-    SELECTION=$(fzf)
-  else
-    SELECTION=$(fzf -q $1)
-  fi
+    if [ -z "$1" ]; then
+        SELECTION=$(fzf)
+    else
+        SELECTION=$(fzf -q "$1")
+    fi
 
-  if [ $? -eq "0" ]; then
-    pushd $(dirname $SELECTION)
-  else
-    echo Aborted.
-  fi
+    if [ $? -eq "0" ]; then
+        pushd $(dirname "$SELECTION")
+    else
+        echo Aborted.
+    fi
 }

@@ -1,10 +1,10 @@
 alias bp='code ~/.bash_profile'
 alias cd..='cd ..'
-alias cd1='pushd ..'
-alias cd2='pushd ../..'
-alias cd3='pushd ../../..'
-alias cd4='pushd ../../../..'
-alias cd5='pushd ../../../../..'
+alias cd1='pushd .. >/dev/null'
+alias cd2='pushd ../.. >/dev/null'
+alias cd3='pushd ../../.. >/dev/null'
+alias cd4='pushd ../../../.. >/dev/null'
+alias cd5='pushd ../../../../.. >/dev/null'
 alias codez='code ~/.zshrc'
 alias ll='ls -hpGoAtr' # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
 #Also see lsx function below
@@ -39,10 +39,10 @@ export LIGHTCYAN='\033[1;36m'
 export WHITE='\033[1;37m'
 
 # These are from the ANSI-defined 256-color lookup table
-function colorBg256 () {
+function colorBg256() {
     printf '\033[48;5;%dm' $1
 }
-function colorBgRgb () {
+function colorBgRgb() {
     printf '\033[48;2;%d;%d;%dm' $1 $2 $3
 }
 function colorFg256() {
@@ -54,7 +54,6 @@ function colorFgRgb() {
 function colorReset() {
     printf "$NOCOLOR"
 }
-
 
 function echoColor() {
     # Specify first argument as the color, second argument as the line
@@ -116,6 +115,26 @@ function lsx() {
 
 function md() {
     mkdir -p "$1" && pushd "$1"
+}
+
+function sd() {
+    local PREVDIR
+    if [[ -z "$1" ]]; then
+        if [[ -z "$MY_SD_PATH" ]]; then
+            echo "No previous folder to switch back to"
+            return 1
+        else
+            # Go back to the previous one
+            PREVDIR="$PWD"
+            pushd "$MY_SD_PATH" >/dev/null
+        fi
+    else
+        # Save current as previous, and switch to specified one
+        PREVDIR="$PWD"
+        pushd "$1" >/dev/null
+    fi
+
+    [[ $? == 0 ]] && export MY_SD_PATH="$PREVDIR" && echo "OLD PATH: $PREVDIR" && echo "NEW PATH: $PWD"
 }
 
 function flatSize() {
