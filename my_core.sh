@@ -70,7 +70,7 @@ function coreCiStatus {
 
 function coreeslint() {
     [[ -z $1 ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
-    corecli mvn:mvn -- eslint:lwc -pl "$1"
+    corecli mvn:mvn -- tools:eslint-lwc -pl "$1"
 }
 
 function coreeslintQuick() {
