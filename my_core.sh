@@ -96,6 +96,11 @@ function coreResubmitCodeReviewStage() {
     corecli crst:submit -c $1
 }
 
+function coreUnitTestModules() {
+    [[ -z $1 ]] && echo 'Please specify CSV list of module references to test, e.g. :appanalytics-connect-api-test-unit,:communities-webruntime-sfdc-impl-test-unit,:ui-uisdk-connect-impl-test-unit' && return 1
+    corecli core:ant utest-surefire -Dutest.modules=$1
+}
+
 function ccli() {
     ALLARGS=$*
     pushd "$HOME/blt/app/main/core"
@@ -167,3 +172,5 @@ function redirectCore() {
     # redirects localhost ports to the specified (other) host as long as the ssh is open
     ssh $SSHARGS -L 6109:localhost:6109 -L 6101:localhost:6101 $OTHERHOST.internal.salesforce.com || echo 'Failed.'
 }
+
+
