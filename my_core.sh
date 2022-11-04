@@ -37,6 +37,8 @@ alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LA
 alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
 alias m2core='export M2_HOME=${HOME}/blt/app/main/core/build/apache-maven'
 
+# Testing
+
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build >/dev/null'
 alias pdcore='pushd ~/blt/app/main/core >/dev/null'
@@ -48,9 +50,14 @@ alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components >/dev/null'
 alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api >/dev/null'
 alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl >/dev/null'
 
-alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog)|(uxact)|(uxerr)|(uxevt)|(3pcml)|(ailtn)|(aiuim)"'
+alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog)|(uxact)|(uxerr)|(uxevt)|(3pcml)|(ailtn)|(aiuim)|(cptsk)"'
+alias tailo11y='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog)|(uxact)|(uxerr)|(uxevt)|(3pcml)|(cptsk)"'
 
 LOC=$(dirname "$0")
+
+function myShelved() {
+    WHOAMI="$(whoami)" && p4 changelists -u "$WHOAMI" -s shelved
+}
 
 function appready() {
     tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep "A P P    R E A D Y"
@@ -65,7 +72,7 @@ function corelogs() {
 }
 
 function coreCiStatus {
-    WHOAMI=$(whoami) && open "https://portal.prod.ci.sfdc.net/?autobuilds=&users=$WHOAMI"
+    WHOAMI="$(whoami)" && open "https://portal.prod.ci.sfdc.net/?autobuilds=&users=$WHOAMI"
 }
 
 function coreeslint() {
@@ -77,10 +84,10 @@ function coreeslintQuick() {
     # Note: this is using a hard-coded version of eslint-tool, need to run the non-quick way to update it
     [[ -z $1 ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
 
-    pushd /Users/loz/tools/eslint-tool/2.0.5 >/dev/null
-    /Users/loz/tools/eslint-tool/2.0.5/node/node-v14.15.1-darwin-x64/bin/node ./node_modules/eslint/bin/eslint.js \
+    pushd $HOME/tools/eslint-tool/2.0.5 >/dev/null
+    $HOME/tools/eslint-tool/2.0.5/node/node-v14.15.1-darwin-x64/bin/node ./node_modules/eslint/bin/eslint.js \
         --no-color --max-warnings 0 \
-        "/Users/loz/blt/app/main/core/$1/modules"
+        "$HOME/blt/app/main/core/$1/modules"
     # --ignore-pattern **/modules/force/adsBridge/adsBridge.js \
     # --ignore-pattern **/modules/native/ldsEngineMobile/ldsEngineMobile.js \
     # --ignore-pattern **/modules/native/ldsWorkerApi/ldsWorkerApi.js \
@@ -90,15 +97,31 @@ function coreeslintQuick() {
     popd >/dev/null
 }
 
-function coreResubmitCodeReviewStage() {
-    # Submits to Code Review Stage Testing (CRST)
+function coreJest() {
+    [[ -z $1 ]] && echo 'Please specify a module, e.g. ui-instrumentation-components' && return 1
+    coremvn tools:jest-raptor -Drpl=$1
+}
+
+function coreStatus() {
+    WHOAMI="$(whoami)" && pcx status --user="$WHOAMI"
+}
+
+function coreSubmitTest() {
+    # Submits to Code Review Stage Testing (CRST) (doesn't actually submit)
     [[ -z $1 ]] && echo 'Please specify the changelist name (check Pending in p4v)' && return 1
     corecli crst:submit -c $1
 }
 
-function coreUnitTestModules() {
+function coreJunitMod() {
     [[ -z $1 ]] && echo 'Please specify CSV list of module references to test, e.g. :appanalytics-connect-api-test-unit,:communities-webruntime-sfdc-impl-test-unit,:ui-uisdk-connect-impl-test-unit' && return 1
     corecli core:ant utest-surefire -Dutest.modules=$1
+}
+
+function coreXunitCl() {
+    [[ -z $1 ]] && echo 'Please specify a changelist' && return 1
+    pushd "$HOME/blt/app/main/core/build"
+    ./ant utest-precheckin -Dchangelist=$1
+    popd
 }
 
 function ccli() {
@@ -121,7 +144,8 @@ function ccresetext() {
         echo 'Please run this command from core'
         return
     fi
-    read -p "Delete $checksum? y/n " RESP
+    echo -n "Delete $checksum? y/n "
+    read RESP
     [[ $RESP != 'y' ]] && return
     rm -rf $checksum
     echo Deleted.
@@ -173,4 +197,33 @@ function redirectCore() {
     ssh $SSHARGS -L 6109:localhost:6109 -L 6101:localhost:6101 $OTHERHOST.internal.salesforce.com || echo 'Failed.'
 }
 
+function jestForMod() {
+    local TEMP_DIR='/tmp/jest'
+    local INSTALL_PATH="$HOME/git/lwc"
+    mkdir -p "$TEMP_DIR"
 
+    local REPO_PATH="$INSTALL_PATH/lwc-testrunner"
+    local BIN_PATH="$REPO_PATH/bin"
+    local SCRIPT_PATH="$BIN_PATH/lwc-test.js"
+
+    if [[ ! -f "$SCRIPT_PATH" ]]; then
+        echo "$SCRIPT_PATH not found."
+        echo -n 'Clone the repo into that path and call "yarn install"? (y/n) '
+        read RESP
+        [[ "$RESP" != 'y' ]] && return 1
+
+        pushd "$PWD" >/dev/null
+        mkdir -p "$INSTALL_PATH" >/dev/null
+        cd "$INSTALL_PATH"
+        git clone git@git.soma.salesforce.com:lwc/lwc-testrunner.git
+        cd "$REPO_PATH"
+        yarn install
+        popd >/dev/null
+    fi
+
+    [[ -z $1 ]] && echo 'Please specify a module, e.g. ui-instrumentation-components' && return 1
+
+    pushd "$BIN_PATH" >/dev/null
+    node "$SCRIPT_PATH" "$HOME/blt/app/main/core/$1" -- --json --forceExit "--outputFile=$TEMP_DIR/$1.json" --no-cache
+    popd >/dev/null
+}

@@ -119,6 +119,7 @@ function md() {
 }
 
 function sd() {
+    # Switch directory with ability to go back to previous one if history and no argument
     local PREVDIR
     if [[ -z "$1" ]]; then
         if [[ -z "$MY_SD_PATH" ]]; then
@@ -136,6 +137,27 @@ function sd() {
     fi
 
     [[ $? == 0 ]] && export MY_SD_PATH="$PREVDIR" && echo "OLD PATH: $PREVDIR" && echo "NEW PATH: $PWD"
+}
+
+function pd() {
+    if [[ -z "$1" ]]; then
+        echo 'Please provide a path to a folder or a file whose folder you want to go to.'
+        return 1
+    fi
+    local DIR
+    if [[ -d "$1" ]]; then
+        DIR="$1"
+    elif [[ -f "$1" ]]; then
+        DIR=$(dirname "$1")
+    else
+        echo 'Invalid path to file or folder'
+        return 1
+    fi
+    echo "$DIR" | grep -e '^/' >/dev/null
+    if [[ $? != 0 ]]; then
+        DIR="$PWD/$DIR"
+    fi
+    sd "$DIR" >/dev/null
 }
 
 function flatSize() {

@@ -15,14 +15,16 @@ function exists() {
 }
 
 function installBrew() {
-    read -p 'Install Brew (macos package loader)? (y/n) ' RESP
+    echo -n 'Install Brew (macos package loader)? (y/n) '
+    read RESP
     [[ "$RESP" != 'y' ]] && return
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     exitIfFailed
 }
 
 function installNotify() {
-    read -p 'Install notify: a simple script to do notifications? (y/n) ' RESP
+    echo 'Install notify: a simple script to do notifications? (y/n) '
+    read RESP
     [[ "$RESP" != 'y' ]] && return
 
     cp "$LOC/notify" /usr/local/bin/
@@ -33,7 +35,8 @@ function Brew() {
     NAME=$1
     LABEL=$2
     [[ "$LABEL" == "" ]] && LABEL=$NAME
-    read -p "Install $LABEL? (y/n) " RESP
+    echo -n "Install $LABEL? (y/n) "
+    read RESP
     [[ "$RESP" != 'y' ]] && return
     brew install "$NAME"
     exitIfFailed

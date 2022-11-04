@@ -29,7 +29,8 @@ alias mvni='mvn install -DskipUnitTests=true -DskipJsDoc'
 
 # NPM
 alias npmg='npm list -g --depth 0' # List globally installed packages
-alias yarnlinklist='ll ~/.config/yarn/link' # List linked packages
+alias yarnlinklist='ll -R ~/.config/yarn/link' # List linked packages recursively
+alias yarnlinked='find node_modules -type l | grep -v "/.bin/"' # Show linked folders except for those that contain .bin in the path
 
 function buildLoop() {
     # Watch src folder, build on changes

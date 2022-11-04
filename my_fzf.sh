@@ -24,7 +24,7 @@ function fullpath() {
 
 ## DEPRECATED alias pd='pushd `fzf | xargs dirname`'
 # "pushd"
-function pd() {
+function pdf() {
     if [ -z "$1" ]; then
         SELECTION=$(fzf)
     else
