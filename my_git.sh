@@ -85,3 +85,13 @@ function gitWho() {
     [[ -z "$GIT_SSH_COMMAND" ]] && echo 'Use "gitSsh filename" to set GIT_SSH_COMMAND env variable'
     return 0
 }
+
+function gitPoke() {
+    # Use this function to push an empty commit to retrigger CI
+    if [[ `git status -s` == '' ]]; then
+        git commit -m "chore: retrigger checks" --allow-empty && git push
+    else
+        echo 'You have uncommitted changes'
+        return 1
+    fi
+}
