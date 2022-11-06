@@ -31,6 +31,13 @@ function installNotify() {
     exitIfFailed
 }
 
+function installTermenu() {
+    echo 'Install termenu: a CLI helper to enable choices? (y/n) '
+    read RESP
+    [[ "$RESP" != 'y' ]] && return
+    pip3 install termenu
+}
+
 function Brew() {
     NAME=$1
     LABEL=$2
@@ -47,5 +54,6 @@ exists brew || installBrew
 exists bat || Brew 'bat' 'bat: a cat clone with syntax highlighting'
 exists fzf || Brew 'fzf' 'fzf: Fuzzy finder'
 exists grcat || Brew 'grc' 'grc/grcat: Colorizer'
+exists termenu || installTermenu
 echo "Done!"
 exists notify && notify "Done!" "my_prereq.sh"
