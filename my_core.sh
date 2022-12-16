@@ -3,6 +3,7 @@ alias buildMod='corecli mvn:mvn -- -pl module process-classes'
 
 # Get latest changelist
 alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
+alias cl242='cat ~/blt/app/242/patch/core/workspace-user.xml  | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
 # Core start/stop
 alias cs='pushd ~/blt/app/main/core >/dev/null && corecli core:start --no-honu-log; popd >/dev/null'
