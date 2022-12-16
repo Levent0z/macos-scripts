@@ -1,3 +1,6 @@
+# Build inside a module
+alias buildMod='corecli mvn:mvn -- -pl module process-classes'
+
 # Get latest changelist
 alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
@@ -50,8 +53,9 @@ alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components >/dev/null'
 alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api >/dev/null'
 alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl >/dev/null'
 
-alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog)|(uxact)|(uxerr)|(uxevt)|(3pcml)|(ailtn)|(aiuim)|(cptsk)"'
-alias tailo11y='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog)|(uxact)|(uxerr)|(uxevt)|(3pcml)|(cptsk)"'
+alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
+alias tailo11y='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
+alias tailo11y242='tail -f ~/blt/app/242/patch/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
 
 LOC=$(dirname "$0")
 
@@ -165,6 +169,17 @@ function cctls() {
     corecli tls:create-certificates tls:install-certificates
 }
 
+function coreSubmitNoCheck() {
+    [[ -z "$1" ]] && echo 'Please provide a changelist number' && return 1
+    corecli core:submit --no-check -c "$1"
+}
+
+function coreUpdateVar() {
+    [[ -z "$1" ]] && echo 'Please provide a variable name as your first argument. e.g. _WEBRUNTIME_FRAMEWORK_VERSION' && return 1
+    [[ -z "$2" ]] && echo 'Please provide a value as your second argument. e.g. 242.40' && return 1
+    corecli graph:update-version-variable -n "$1" --version "$2"
+}
+
 function logrt() {
     if [ -z $1 ]; then
         echo 'Please provide logRecordType to filter as your first argument (e.g. ailtn)'
@@ -227,3 +242,5 @@ function jestForMod() {
     node "$SCRIPT_PATH" "$HOME/blt/app/main/core/$1" -- --json --forceExit "--outputFile=$TEMP_DIR/$1.json" --no-cache
     popd >/dev/null
 }
+
+
