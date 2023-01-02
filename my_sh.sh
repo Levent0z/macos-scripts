@@ -168,3 +168,7 @@ function flatSize() {
         popd >/dev/null
     done
 }
+
+function whichSh() {
+    ps -p $$ -o command | tail -1 | cut -f 1 -d ' ' | xargs ls -l
+}
