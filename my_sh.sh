@@ -170,5 +170,14 @@ function flatSize() {
 }
 
 function whichSh() {
-    ps -p $$ -o command | tail -1 | cut -f 1 -d ' ' | xargs ls -l
+    local CMD=`ps -p $$ -o command | tail -1`
+    local CMDP=`echo $CMD | cut -f 1 -d ' '`
+    
+    if [[ "$CMDP" =~ ^- ]]; 
+    then        
+        # For Linux running on NAS
+        CMDP=`echo $CMD | cut -f 2 -d '-'`
+    fi
+
+    which "$CMDP" | xargs ls -l
 }
