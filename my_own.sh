@@ -21,3 +21,13 @@ function scpmy() {
     [[ -z $MYREMOTEIP ]] && echo 'Please set MYREMOTEIP by running ipv on the remote machine' && return 1
     scp -i /Users/loz/.ssh/id_rsa_ltm -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET "$MYREMOTEIP:$1" "$2"
 }
+
+function mountOznas() {
+    cd ~/oznas/node-server
+    mount -t smbfs //leventoz@OZNAS/node-server .
+}
+
+function sshOznas() {
+    ssh oznas -p 220
+}
+
