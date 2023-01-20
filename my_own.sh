@@ -28,6 +28,6 @@ function mountOznas() {
 }
 
 function sshOznas() {
+    [[ `hostname` == 'OZNAS' ]] && echo 'Already on oznas.' && exit 1
     ssh oznas -p 220
 }
-
