@@ -95,3 +95,9 @@ function gitPoke() {
         return 1
     fi
 }
+
+function gitNoPager() {
+    # Prevents git log and git branch from opening theit outputs in less    
+    git config --global pager.branch false 
+    git config --global pager.log false
+}
