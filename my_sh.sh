@@ -7,6 +7,7 @@ alias cd4='pushd ../../../.. >/dev/null'
 alias cd5='pushd ../../../../.. >/dev/null'
 alias clearb='echo -n -e "\e[2J\e[3J\e[1;1H"' # clear screen and scroll buffer
 alias codez='code ~/.zshrc'
+alias dusage='du -sh *' # disk usage
 alias ll='ls -hpGoAtr' # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
 #Also see lsx function below
 alias lx='script -q /dev/null ls -pGA1 | sort -bf' # maintain colors, use 1 column, sort case-insensitively (colors needed to sort inside groups: executables, folders, links, files)
@@ -142,7 +143,7 @@ function sd() {
 function pd() {
     if [[ -z "$1" ]]; then
         sd
-    else 
+    else
         local DIR
         if [[ -d "$1" ]]; then
             DIR="$1"
