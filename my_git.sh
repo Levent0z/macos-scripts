@@ -115,3 +115,11 @@ function gitTheirs() {
     [[ "$RESP" == 'n' ]] && echo 'Skipped.' && return
     git rebase --continue
 }
+
+function gitPr() {
+    if [ -z "$1" ]; then
+        echo 'Please specify the PR number'
+        return 1
+    fi
+    git fetch upstream "pull/$1/head:PR$1" && git checkout $1
+}

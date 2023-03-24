@@ -55,3 +55,6 @@ alias dox='pushd ~/github/levent0z/docsify'
 # Volta
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
+
+# MacOS App Nap
+alias noappnap='defaults write NSGlobalDomain NSAppSleepDisabled -bool YES'

@@ -244,4 +244,7 @@ function jestForMod() {
     popd >/dev/null
 }
 
-
+function precheck() {
+    [[ -z $1 ]] && echo 'Please specify checkin number' && return 1
+    pcx _validations:remote-checks -c "$1" -a main_precheckin -v FAKE_SUBMIT
+}
