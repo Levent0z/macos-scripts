@@ -123,3 +123,26 @@ function gitPr() {
     fi
     git fetch upstream "pull/$1/head:PR$1" && git checkout $1
 }
+
+function gitHistory() {
+    # lists the created and last updated time for each file in a provided pattern, e.g. "*.md"
+    if [ -z "$1" ]; then
+        echo 'Please specify a file pattern, e.g. "*.md"'
+        return 1
+    fi
+    
+    local FILES=`find . -name "$1"`
+
+    let X=0
+    for FILE in $FILES; do 
+        let X++
+        # skip node_modules in the path
+        echo "$FILE" | grep 'node_modules' >/dev/null
+        [[ "$?" == "0" ]] && continue
+        declare HISTORY=`git log --pretty=tformat:'%cI' -- "$FILE"`
+        UPDATED=`echo "$HISTORY" | head -1`
+        CREATED=`echo "$HISTORY" | tail -1`
+        echo "$FILE", "$CREATED", "$UPDATED"
+    done
+    # echo "$X" Files Processed.
+}
