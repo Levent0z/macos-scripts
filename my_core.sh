@@ -41,6 +41,9 @@ alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LA
 alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
 alias m2core='export M2_HOME=${HOME}/blt/app/main/core/build/apache-maven'
 
+# Perforce
+alias p4s='p4 changes -c loz-ltmmhp9' # similar to gs for git status
+
 # Testing
 
 # Pushd
@@ -120,6 +123,10 @@ function coreSubmitTest() {
 function coreJunitMod() {
     [[ -z $1 ]] && echo 'Please specify CSV list of module references to test, e.g. :appanalytics-connect-api-test-unit,:communities-webruntime-sfdc-impl-test-unit,:ui-uisdk-connect-impl-test-unit' && return 1
     corecli core:ant utest-surefire -Dutest.modules=$1
+}
+
+function clwrTest() {
+    corecli --monitor direct core:ant utest-surefire -Dutest.modules=:communities-webruntime-sites-impl-test-unit,:communities-webruntime-sfdc-impl-test-unit
 }
 
 function coreXunitCl() {
@@ -245,6 +252,13 @@ function jestForMod() {
 }
 
 function precheck() {
-    [[ -z $1 ]] && echo 'Please specify checkin number' && return 1
-    pcx _validations:remote-checks -c "$1" -a main_precheckin -v FAKE_SUBMIT
+    [[ -z "$1" ]] && echo 'Please specify checkin number' && return 1
+
+    # More: file:///Users/loz/.honu/cache/pcx.html#pc:validate
+    pcx pc:validate -c "$1" --autobuild main_precheckin --timeout 300
+}
+
+function clFiles() {
+    [[ -z "$1" ]] && echo 'Please specify checkin number' && return 1
+    p4 describe "$1" | grep -e '^\.\.\.' | cut -d ' ' -f 2
 }
