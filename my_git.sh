@@ -129,3 +129,12 @@ function gitHistory() {
     local MY_PATH="$HOME/github/levent0z/macos-scripts"
     "$MY_PATH/git_history.sh" "$1"
 }
+
+function gcb() {
+    [[ -z $1 ]] && echo 'Please specify a suffix to the branch' && return 1
+    git checkout -b $(date "+%y%m%d")-$1
+}
+
+function gpo() {
+    git push -u origin $(git branch | grep '*' | cut -d ' ' -f2)
+}

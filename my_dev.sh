@@ -16,6 +16,7 @@ alias ideareset='rm -rf .idea && rm -rf .ijwb'
 alias ejh='echo $JAVA_HOME'
 alias jhclear='unset JAVA_HOME'
 alias usjh='unset JAVA_HOME'
+# Tip: vim can be used to view inside a JAR file
 
 # Maven
 alias em2='echo $M2_HOME'

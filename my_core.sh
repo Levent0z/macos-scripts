@@ -3,13 +3,19 @@ alias buildMod='corecli mvn:mvn -- -pl module process-classes'
 
 # Get latest changelist
 alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
-alias cl242='cat ~/blt/app/242/patch/core/workspace-user.xml  | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
+alias cl244='cat ~/blt/app/244/patch/core/workspace-user.xml  | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
 # Core start/stop
 alias cs='pushd ~/blt/app/main/core >/dev/null && corecli core:start --no-honu-log; popd >/dev/null'
 alias cx='pushd ~/blt/app/main/core >/dev/null && corecli core:stop; popd >/dev/null'
 alias ci='pushd ~/blt/app/main/core >/dev/null && corecli ide:intellij; popd >/dev/null'
 alias cv='pushd ~/blt/app/main/core >/dev/null && corecli ide:vscode; popd >/dev/null'
+
+# Core-on-Git
+alias cog='git sfdc'
+alias cogd='GITSFDC_TRACE=1 git sfdc' # debug
+alias cogs='corecli core:start --no-honu-log'
+alias cogx='corecli core:stop'
 
 # Aura
 alias ax='node ./aura-util/src/test/tools/xUnit/xUnit.js.Console.js /dependency:./aura-util/src/test/tools/xUnit/dependencies ./aura-impl/src/test/javascript' #run this from the root aura folder:
@@ -42,13 +48,15 @@ alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
 alias m2core='export M2_HOME=${HOME}/blt/app/main/core/build/apache-maven'
 
 # Perforce
-alias p4s='p4 changes -c loz-ltmmhp9' # similar to gs for git status
+alias p4s='echo "DEFAULT CHANGELIST:" && p4 opened -c default; echo "CHANGELISTS:" && p4 changes -c loz-ltmmhp9' # similar to gs for git status
 
 # Testing
 
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build >/dev/null'
 alias pdcore='pushd ~/blt/app/main/core >/dev/null'
+alias pd244='pushd ~/blt/app/244/patch/core >/dev/null'
+alias pdcog='pushd ~/cog/core-public/core >/dev/null'
 alias pdlogs='pushd ~/blt/app/main/core/sfdc/logs/sfdc >/dev/null'
 alias pdext='pushd ~/blt/app/main/core/ext >/dev/null'
 alias pdgatesd='pushd ~/blt/app/main/core/sfdc/config/gater/dev/gates >/dev/null'
@@ -259,6 +267,16 @@ function precheck() {
 }
 
 function clFiles() {
-    [[ -z "$1" ]] && echo 'Please specify checkin number' && return 1
+    [[ -z "$1" ]] && echo 'Please specify changelist ID' && return 1
     p4 describe "$1" | grep -e '^\.\.\.' | cut -d ' ' -f 2
+}
+
+function cogUpdate() {
+    # https://git.soma.salesforce.com/pages/gimlet/gimlet-docs/software-updates
+    brew update && brew upgrade git-sfdc-v2
+}
+
+function cogu() {
+    [[ -z "$1" ]] && echo 'Please specify changelist ID' && return 1
+    git sfdc p4-unshelve $1
 }
