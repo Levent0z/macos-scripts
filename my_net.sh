@@ -1,5 +1,6 @@
 alias flushdns='sudo killall -HUP mDNSResponder; say dns cleared successfully'
-alias ipv='ip utun2'
+alias ips='ifconfig | egrep "\d+\.\d+\.\d+\.\d+"'
+alias ipv='ip utun0'
 alias ports1='lsof -iTCP -sTCP:LISTEN -P -n' # Show Open ports
 alias ports2='netstat -an'                   # Show Open ports
 alias whoareyou='hostname | cut -d"." -f1'   # First part of FQDN

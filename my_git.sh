@@ -1,4 +1,4 @@
-alias glo='git log --oneline -n20'
+alias gb='git branch --show-current'
 alias gs='git status'
 alias nogpg='git config commit.gpgsign false'
 alias pdgithub='pushd ~/github'
@@ -6,14 +6,16 @@ alias pdgithub='pushd ~/github'
 ## Use "gh prs" to show open PRs using GitHub CLI
 which gh >/dev/null && gh alias set prs "api -X GET search/issues  -f q='is:open, author:$(whoami), is:pr' --jq '.items[].html_url'" >/dev/null
 
-## Git log with optional args
 function gl() {
-    if [ -z $1 ]; then
-        ARG=
-    else
-        ARG=-n$1
-    fi
-    git log --pretty=format:"%h%x09%an%x09%ad%x09%s" --date=iso $ARG
+    local LINES=10
+    [[ -z $1 ]] || LINES=$1
+    git log --pretty=format:"%h%x09%an%x09%ad%x09%s" --date=iso -n$LINES
+}
+
+function glo() {
+    local LINES=10
+    [[ -z $1 ]] || LINES=$1
+    git log --oneline -n$LINES
 }
 
 ## Git Fetch Upstream
@@ -121,7 +123,7 @@ function gitPr() {
         echo 'Please specify the PR number'
         return 1
     fi
-    git fetch upstream "pull/$1/head:PR$1" && git checkout $1
+    git fetch upstream "pull/$1/head:PR$1" && git checkout PR$1
 }
 
 function gitHistory() {

@@ -6,10 +6,10 @@ alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -
 alias cl244='cat ~/blt/app/244/patch/core/workspace-user.xml  | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
 # Core start/stop
-alias cs='pushd ~/blt/app/main/core >/dev/null && corecli core:start --no-honu-log; popd >/dev/null'
-alias cx='pushd ~/blt/app/main/core >/dev/null && corecli core:stop; popd >/dev/null'
-alias ci='pushd ~/blt/app/main/core >/dev/null && corecli ide:intellij; popd >/dev/null'
-alias cv='pushd ~/blt/app/main/core >/dev/null && corecli ide:vscode; popd >/dev/null'
+alias cs='corecli core:start --no-honu-log'
+alias cx='corecli core:stop'
+alias ci='corecli ide:intellij'
+alias cv='corecli ide:vscode'
 
 # Core-on-Git
 alias cog='git sfdc'
