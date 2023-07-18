@@ -2,7 +2,7 @@
 alias buildMod='corecli mvn:mvn -- -pl module process-classes'
 
 # Get latest changelist
-alias cl='cat ~/blt/app/main/core/workspace-user.xml | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
+alias cl='cat "${CORE:-$HOME/blt/app/main/core}/workspace-user.xml" | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 alias cl244='cat ~/blt/app/244/patch/core/workspace-user.xml  | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
 # Core start/stop
@@ -14,8 +14,8 @@ alias cv='corecli ide:vscode'
 # Core-on-Git
 alias cog='git sfdc'
 alias cogd='GITSFDC_TRACE=1 git sfdc' # debug
-alias cogs='corecli core:start --no-honu-log'
-alias cogx='corecli core:stop'
+alias setcog='export CORE=~/cog/main/core'
+alias setblt='export CORE=~/blt/app/main/core'
 
 # Aura
 alias ax='node ./aura-util/src/test/tools/xUnit/xUnit.js.Console.js /dependency:./aura-util/src/test/tools/xUnit/dependencies ./aura-impl/src/test/javascript' #run this from the root aura folder:
@@ -25,8 +25,8 @@ alias amod='chmod 666 ~/git/loz/aura/aura-resources/target/classes/aura/javascri
 alias dra='docker run -it --rm ops0-artifactrepo1-0-prd.data.sfdc.net'
 
 # Init JAVA_HOME and M2_HOME based on what CoreCli uses
-alias initj='pushd "$HOME/blt/app/main/core" >/dev/null && for LINE in `corecli show-env | grep -e "^JAVA_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME'
-alias initm='pushd "$HOME/blt/app/main/core" >/dev/null && for LINE in `corecli show-env | grep -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo M2_HOME=$M2_HOME'
+alias initj='pushd "${CORE:-$HOME/blt/app/main/core}" >/dev/null && for LINE in `corecli show-env | grep -e "^JAVA_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME'
+alias initm='pushd "${CORE:-$HOME/blt/app/main/core}" >/dev/null && for LINE in `corecli show-env | grep -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo M2_HOME=$M2_HOME'
 
 # Java
 alias ejhc='corecli env | grep -e ^JAVA_HOME'
@@ -64,6 +64,7 @@ alias pdm2='pushd ~/.m2/repository/com/salesforce/services/instrumentation >/dev
 alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components >/dev/null'
 alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api >/dev/null'
 alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl >/dev/null'
+alias pdwr='pushd ~/.m2/repository/sfdc/ui/webruntime-framework >/dev/null'
 
 alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
 alias tailo11y='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
@@ -279,4 +280,24 @@ function cogUpdate() {
 function cogu() {
     [[ -z "$1" ]] && echo 'Please specify changelist ID' && return 1
     git sfdc p4-unshelve $1
+}
+
+function fixNull() {
+    # This fixes the NullPointerException that happens during component-compile of org.auraframework:aura-maven-plugin
+    # Run it under core
+    find . -name .registries -delete
+    find . -name .lwr_registries -delete
+}
+
+function cogClone() {
+    [[ -z "$1" ]] && echo "Please specify the name of the repo to clone (e.g p4/main or p4/244-patch)" && return 1
+    local NAME=$(echo $1 | cut -d'/' -f2)
+
+    if [[ -z "$2" ]]; then
+        echo -n "Using $NAME for the name of the folder to clone into. Continue? (Y/n) "
+        read RESP
+        [[ "$RESP" != 'y' ]] && [[ "$RESP" != 'Y' ]] && return 1
+    fi
+
+    git sfdc clone -b $1 -n $2
 }

@@ -5,6 +5,9 @@ alias etch='~/hostsfix.sh && adb root && adb remount && adb push /etc/hosts /etc
 alias studio='open /Applications/Android\ Studio.app/Contents/MacOS/studio'
 alias wemu='emu -avd Pixel3XLAPI28_3 -writable-system'
 
+# Bazel
+alias bzclean='bazel clean --expunge'
+
 # heroku autocomplete setup
 #HEROKU_AC_BASH_SETUP_PATH=$HOME/Library/Caches/heroku/autocomplete/bash_setup && test -f $HEROKU_AC_BASH_SETUP_PATH && source $HEROKU_AC_BASH_SETUP_PATH;
 
@@ -28,9 +31,17 @@ alias m2362="export M2_HOME='$HOME/sdk/apache-maven-3.6.2'"
 alias mvnp='mvn clean package'
 alias mvni='mvn install -DskipUnitTests=true -DskipJsDoc'
 
+function mvnGet() {
+    local REPO=$1       #e.g. https://phx-nexus-proxy.internal.salesforce.com
+    local ARTIFACT=$2   # e.g. com.salesforce.armada:scs-client:LATEST:jar
+    local TRANSITIVE=$3 # e.g. false
+    local DEST=$4       #e.g. scs-client.jar
+    mvn dependency:get -DrepoUrl=$REPO -Dartifact=$ARTIFACT -Dtransitive=$TRANSITIVE -Ddest=$4
+}
+
 # NPM
-alias npmg='npm list -g --depth 0' # List globally installed packages
-alias yarnlinklist='ll -R ~/.config/yarn/link' # List linked packages recursively
+alias npmg='npm list -g --depth 0'                              # List globally installed packages
+alias yarnlinklist='ll -R ~/.config/yarn/link'                  # List linked packages recursively
 alias yarnlinked='find node_modules -type l | grep -v "/.bin/"' # Show linked folders except for those that contain .bin in the path
 
 function buildLoop() {
@@ -59,3 +70,6 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 
 # MacOS App Nap
 alias noappnap='defaults write NSGlobalDomain NSAppSleepDisabled -bool YES'
+
+# XCode
+alias xi='xcode-select --install'
