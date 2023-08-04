@@ -7,6 +7,7 @@ alias cd4='pushd ../../../.. >/dev/null'
 alias cd5='pushd ../../../../.. >/dev/null'
 alias clearb='echo -n -e "\e[2J\e[3J\e[1;1H"' # clear screen and scroll buffer
 alias codez='code ~/.zshrc'
+alias dateiso='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias dusage='du -sh *' # disk usage
 alias ll='ls -hpGoAtr' # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
 #Also see lsx function below
