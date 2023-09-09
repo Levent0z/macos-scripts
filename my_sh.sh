@@ -186,6 +186,6 @@ function whichSh() {
 
 function scriptFolder() {
     # Returns the folder of the script
-    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local script_dir="$(cd "$(dirname "$0")" && pwd)"
     echo "$script_dir"
 }
