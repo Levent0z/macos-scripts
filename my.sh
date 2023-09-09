@@ -1,4 +1,4 @@
-MY_PATH="$HOME/github/levent0z/macos-scripts"
+declare MY_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$MY_PATH/my_sh.sh"
 source "$MY_PATH/my_net.sh"
 which fzf >/dev/null && source "$MY_PATH/my_fzf.sh"

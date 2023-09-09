@@ -183,3 +183,9 @@ function whichSh() {
 
     which "$CMDP" | xargs ls -l
 }
+
+function scriptFolder() {
+    # Returns the folder of the script
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    echo "$script_dir"
+}

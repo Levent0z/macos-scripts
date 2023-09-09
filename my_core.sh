@@ -2,8 +2,7 @@
 alias buildMod='corecli mvn:mvn -- -pl module process-classes'
 
 # Get latest changelist
-alias cl='cat "${CORE:-$HOME/blt/app/main/core}/workspace-user.xml" | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
-alias cl244='cat ~/blt/app/244/patch/core/workspace-user.xml  | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
+alias cl='cat "$CORE/workspace-user.xml" | grep -C0 revision | sed -E  "s/^.*<revision>(.+)<.revision>/\1/"'
 
 # Core start/stop
 alias cs='corecli core:start --no-honu-log'
@@ -15,6 +14,7 @@ alias cv='corecli ide:vscode'
 alias cog='git sfdc'
 alias cogd='GITSFDC_TRACE=1 git sfdc' # debug
 alias setcog='export CORE=~/cog/main/core'
+alias setcog246='export CORE=~/cog/246-patch/core'
 alias setblt='export CORE=~/blt/app/main/core'
 
 # Aura
@@ -55,8 +55,7 @@ alias p4s='echo "DEFAULT CHANGELIST:" && p4 opened -c default; echo "CHANGELISTS
 # Pushd
 alias pdbuild='pushd ~/blt/app/main/core/build >/dev/null'
 alias pdcore='pushd ~/blt/app/main/core >/dev/null'
-alias pd244='pushd ~/blt/app/244/patch/core >/dev/null'
-alias pdcog='pushd ~/cog/core-public/core >/dev/null'
+alias pdcog='pushd ~/cog/main >/dev/null'
 alias pdlogs='pushd ~/blt/app/main/core/sfdc/logs/sfdc >/dev/null'
 alias pdext='pushd ~/blt/app/main/core/ext >/dev/null'
 alias pdgatesd='pushd ~/blt/app/main/core/sfdc/config/gater/dev/gates >/dev/null'
@@ -140,14 +139,14 @@ function clwrTest() {
 
 function coreXunitCl() {
     [[ -z $1 ]] && echo 'Please specify a changelist' && return 1
-    pushd "$HOME/blt/app/main/core/build"
+    pushd "$HOME/cog/main/core/build"
     ./ant utest-precheckin -Dchangelist=$1
     popd
 }
 
 function ccli() {
     ALLARGS=$*
-    pushd "$HOME/blt/app/main/core"
+    pushd "$HOME/cog/main/core"
     corecli $ALLARGS
     RETVAL=$?
     popd
@@ -203,7 +202,7 @@ function logrt() {
         return 1
     fi
 
-    tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^$1"
+    tail -f ~/cog/main/core/sfdc/logs/sfdc/output.log | grep -E "^$1"
 }
 
 # Reminder: `System.out.println` doesn't go onto output.log
@@ -213,7 +212,7 @@ function logwatch() {
         echo 'Please provide your keyword to filter as your first argument (escape spaces)'
         return 1
     fi
-    tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "$1"
+    tail -f ~/cog/main/core/sfdc/logs/sfdc/output.log | grep -E "$1"
 }
 
 function redirectCore() {
@@ -256,7 +255,7 @@ function jestForMod() {
     [[ -z $1 ]] && echo 'Please specify a module, e.g. ui-instrumentation-components' && return 1
 
     pushd "$BIN_PATH" >/dev/null
-    node "$SCRIPT_PATH" "$HOME/blt/app/main/core/$1" -- --json --forceExit "--outputFile=$TEMP_DIR/$1.json" --no-cache
+    node "$SCRIPT_PATH" "$HOME/cog/main/core/$1" -- --json --forceExit "--outputFile=$TEMP_DIR/$1.json" --no-cache
     popd >/dev/null
 }
 
