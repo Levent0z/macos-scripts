@@ -21,6 +21,9 @@ alias setblt='export CORE=~/blt/app/main/core'
 alias ax='node ./aura-util/src/test/tools/xUnit/xUnit.js.Console.js /dependency:./aura-util/src/test/tools/xUnit/dependencies ./aura-impl/src/test/javascript' #run this from the root aura folder:
 alias amod='chmod 666 ~/git/loz/aura/aura-resources/target/classes/aura/javascript/*; ll ~/git/loz/aura/aura-resources/target/classes/aura/javascript/*'
 
+#Bazel
+alias bqpackages='bazel query "kind(package_info, deps(//tools/build/bazel/packages:core_packages))" --output=package' # run this under core
+
 # Docker
 alias dra='docker run -it --rm ops0-artifactrepo1-0-prd.data.sfdc.net'
 
@@ -191,9 +194,36 @@ function coreSubmitNoCheck() {
 }
 
 function coreUpdateVar() {
+    # https://confluence.internal.salesforce.com/display/COREBUILD/Work+With+Bazel+Packages
     [[ -z "$1" ]] && echo 'Please provide a variable name as your first argument. e.g. _WEBRUNTIME_FRAMEWORK_VERSION' && return 1
     [[ -z "$2" ]] && echo 'Please provide a value as your second argument. e.g. 242.40' && return 1
     corecli graph:update-version-variable -n "$1" --version "$2"
+    echo 'You can use coreRestoreVar to undo this.'
+}
+
+function coreRestoreVar() {
+    [[ ! -f "workspace.xml" ]] && [[ ! -d "core" ]] && echo "Please run this command from Core folder" && return 1
+    echo 'Checking for modified .bzl files...'
+    local FILES=$(git status -s | grep -e "\.bzl$" | cut -d ' ' -f 3)
+    if [[ -z "$FILES" ]]; then
+        echo 'No modified .bzl files found.'
+        return 0
+    fi
+    echo 'The following files will be restored:'
+    echo "$FILES"
+    echo 'To diff them first, enter "d"'
+    while true; do
+        echo -n 'Continue? (Y/n/d) '
+        read RESP
+        [[ "$RESP" == 'n' ]] || [[ "$RESP" == 'N' ]] && echo "Canceled." && return 1
+        if [[ "$RESP" == 'd' ]] || [[ "$RESP" == 'D' ]]; then
+            echo "$FILES" | xargs git diff --
+            continue
+        fi
+        break
+    done
+    echo "$FILES" | xargs git restore
+    echo 'Done.'
 }
 
 function logrt() {
