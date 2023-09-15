@@ -1,3 +1,6 @@
+export DEFAULTCORE=$HOME/cog/main/core
+export PD=$(which pd >/dev/null && echo 'pd' || echo 'pushd')
+
 # Build inside a module
 alias buildMod='corecli mvn:mvn -- -pl module process-classes'
 
@@ -28,8 +31,8 @@ alias bqpackages='bazel query "kind(package_info, deps(//tools/build/bazel/packa
 alias dra='docker run -it --rm ops0-artifactrepo1-0-prd.data.sfdc.net'
 
 # Init JAVA_HOME and M2_HOME based on what CoreCli uses
-alias initj='pushd "${CORE:-$HOME/blt/app/main/core}" >/dev/null && for LINE in `corecli show-env | grep -e "^JAVA_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME'
-alias initm='pushd "${CORE:-$HOME/blt/app/main/core}" >/dev/null && for LINE in `corecli show-env | grep -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo M2_HOME=$M2_HOME'
+alias initj='$PD "${CORE:-$DEFAULTCORE}" >/dev/null && for LINE in `corecli show-env | grep -e "^JAVA_HOME="`; do export $LINE; done && popd >/dev/null && echo JAVA_HOME=$JAVA_HOME'
+alias initm='$PD "${CORE:-$DEFAULTCORE}" >/dev/null && for LINE in `corecli show-env | grep -e "^M2_HOME="`; do export $LINE; done && popd >/dev/null && echo M2_HOME=$M2_HOME'
 
 # Java
 alias ejhc='corecli env | grep -e ^JAVA_HOME'
@@ -39,38 +42,38 @@ alias jh1_308='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk1.
 alias jhzulu8='export JAVA_HOME=/Library/Java/JavaVirtualMachines/zulu-8.jdk/Contents/Home/'
 alias jh11='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk_11.0.9.1_11.43.62.jdk/Contents/Home/'
 alias jhl='export JAVA_HOME=/Library/Java/JavaVirtualMachines/sfdc-openjdk_11.0.9.1_11.43.62.jdk/Contents/Home/' # latest
+alias jd='jdb -attach7 localhost:$(cat "${CORE:-~/core-public/core}/build/dev.properties" | grep "jdwp_debug_port" | cut -d" " -f3)'
 
 # Maven
 alias codemvnlogs='code ~/.corecli.logs/mvn:mvn'
-alias codepom='code ~/blt/app/main/core/pom.xml'
-alias codews='code ~/blt/app/main/core/workspace-user.xml'
+alias codepom='code "${CORE:-$DEFAULTCORE}/pom.xml"'
+alias codews='code "${CORE:-$DEFAULTCORE}/workspace-user.xml"'
 alias coremvn='corecli mvn:mvn -- ' # specify additional args directly to maven
-alias coremvni='corecli mvn:mvn -- com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea'
-alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project=${HOME}/blt/app/main/core/.idea' # applies to main
-alias mvnenv='source ~/blt/app/main/core/build/maven-env.sh'
-alias m2core='export M2_HOME=${HOME}/blt/app/main/core/build/apache-maven'
+alias coremvni='corecli mvn:mvn -- com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project="${CORE:-$DEFAULTCORE}/.idea'
+alias mvnciij='mvn clean install com.sfdc.maven.plugins:intellij-maven-plugin:LATEST:import -Dintellij.root.project="${CORE:-$DEFAULTCORE}/.idea'
+alias mvnenv='source "${CORE:-$DEFAULTCORE}/build/maven-env.sh"'
+alias m2core='export M2_HOME="${CORE:-$DEFAULTCORE}/build/apache-maven"'
 
 # Perforce
 alias p4s='echo "DEFAULT CHANGELIST:" && p4 opened -c default; echo "CHANGELISTS:" && p4 changes -c loz-ltmmhp9' # similar to gs for git status
 
 # Testing
 
-# Pushd
-alias pdbuild='pushd ~/blt/app/main/core/build >/dev/null'
-alias pdcore='pushd ~/blt/app/main/core >/dev/null'
-alias pdcog='pushd ~/cog/main >/dev/null'
-alias pdlogs='pushd ~/blt/app/main/core/sfdc/logs/sfdc >/dev/null'
-alias pdext='pushd ~/blt/app/main/core/ext >/dev/null'
-alias pdgatesd='pushd ~/blt/app/main/core/sfdc/config/gater/dev/gates >/dev/null'
-alias pdm2='pushd ~/.m2/repository/com/salesforce/services/instrumentation >/dev/null'
-alias pduic='pushd ~/blt/app/main/core/ui-instrumentation-components >/dev/null'
-alias pduia='pushd ~/blt/app/main/core/ui-instrumentation-api/java/src/ui/instrumentation/api >/dev/null'
-alias pduii='pushd ~/blt/app/main/core/ui-instrumentation-impl/java/src/ui/instrumentation/impl >/dev/null'
-alias pdwr='pushd ~/.m2/repository/sfdc/ui/webruntime-framework >/dev/null'
+# $PD
+alias pdbuild='$PD "${CORE:-$DEFAULTCORE}/build" >/dev/null'
+alias pdcore='$PD "${CORE:-$DEFAULTCORE}" >/dev/null'
+alias pdcog='$PD "${CORE:-$DEFAULTCORE}/.." >/dev/null'
+alias pdlogs='$PD "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc" >/dev/null'
+alias pdext='$PD "${CORE:-$DEFAULTCORE}/ext" >/dev/null'
+alias pdgatesd='$PD "${CORE:-$DEFAULTCORE}/sfdc/config/gater/dev/gates" >/dev/null'
+alias pdm2='$PD ~/.m2/repository/com/salesforce/services/instrumentation >/dev/null'
+alias pduic='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-components" >/dev/null'
+alias pduia='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-api/java/src/ui/instrumentation/api" >/dev/null'
+alias pduii='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-impl/java/src/ui/instrumentation/impl" >/dev/null'
+alias pdwr='$PD ~/.m2/repository/sfdc/ui/webruntime-framework >/dev/null'
 
-alias tailins='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
-alias tailo11y='tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
-alias tailo11y242='tail -f ~/blt/app/242/patch/core/sfdc/logs/sfdc/output.log | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
+alias tailins='tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
+alias tailo11y='tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
 
 LOC=$(dirname "$0")
 
@@ -79,15 +82,15 @@ function myShelved() {
 }
 
 function appready() {
-    tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep "A P P    R E A D Y"
+    tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep "A P P    R E A D Y"
 }
 
 function appchanged() {
-    tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grep "changed due to: CHANGE"
+    tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep "changed due to: CHANGE"
 }
 
 function corelogs() {
-    tail -f ~/blt/app/main/core/sfdc/logs/sfdc/output.log | grcat "$LOC/config/conf.sfcore"
+    tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grcat "$LOC/config/conf.sfcore"
 }
 
 function coreCiStatus {
@@ -106,7 +109,7 @@ function coreeslintQuick() {
     pushd $HOME/tools/eslint-tool/2.0.5 >/dev/null
     $HOME/tools/eslint-tool/2.0.5/node/node-v14.15.1-darwin-x64/bin/node ./node_modules/eslint/bin/eslint.js \
         --no-color --max-warnings 0 \
-        "$HOME/blt/app/main/core/$1/modules"
+        "${CORE:-$DEFAULTCORE}/$1/modules"
     # --ignore-pattern **/modules/force/adsBridge/adsBridge.js \
     # --ignore-pattern **/modules/native/ldsEngineMobile/ldsEngineMobile.js \
     # --ignore-pattern **/modules/native/ldsWorkerApi/ldsWorkerApi.js \

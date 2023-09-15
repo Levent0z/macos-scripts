@@ -9,13 +9,14 @@ alias clearb='echo -n -e "\e[2J\e[3J\e[1;1H"' # clear screen and scroll buffer
 alias codez='code ~/.zshrc'
 alias dateiso='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias dusage='du -sh *' # disk usage
-alias ll='ls -hpGoAtr' # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
+alias ll='ls -hpGoAtr'  # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
 #Also see lsx function below
 alias lx='script -q /dev/null ls -pGA1 | sort -bf' # maintain colors, use 1 column, sort case-insensitively (colors needed to sort inside groups: executables, folders, links, files)
 alias ps0=$PS1
 alias ps1='PS1="\n\[\e[1;37m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]\$(git_branch_text)\n\[\e[1;36m\]o>\[\e[0;37m\]"'
 alias ps2='PS1="\n\[\e[0;33m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]$(git_branch_text)\n\[\e[1;36m\]o>\[\e[0;0m\]"'
 alias sbp='source ~/.bash_profile'
+alias therm='pmset -g thermlog'
 alias wrapoff='tput rmam' #word-wrap disable
 alias wrapon='tput smam'  #word-wrap enable
 
@@ -172,13 +173,12 @@ function flatSize() {
 }
 
 function whichSh() {
-    local CMD=`ps -p $$ -o command | tail -1`
-    local CMDP=`echo $CMD | cut -f 1 -d ' '`
-    
-    if [[ "$CMDP" =~ ^- ]]; 
-    then        
+    local CMD=$(ps -p $$ -o command | tail -1)
+    local CMDP=$(echo $CMD | cut -f 1 -d ' ')
+
+    if [[ "$CMDP" =~ ^- ]]; then
         # For Linux running on NAS
-        CMDP=`echo $CMD | cut -f 2 -d '-'`
+        CMDP=$(echo $CMD | cut -f 2 -d '-')
     fi
 
     which "$CMDP" | xargs ls -l

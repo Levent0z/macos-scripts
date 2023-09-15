@@ -34,3 +34,5 @@ source "$MY_PATH/my_dev.sh"
 which corecli >/dev/null && source "$MY_PATH/my_core.sh"
 [ -d "$HOME/git" ] && source "$MY_PATH/my_soma.sh"
 source "$MY_PATH/my_own.sh"
+
+setcog
