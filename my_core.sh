@@ -102,6 +102,27 @@ function coreeslint() {
     corecli mvn:mvn -- tools:eslint-lwc -pl "$1"
 }
 
+function bzeslint() {
+    set -i
+
+    if [[ ! -f "BUILD.bazel" ]]; then
+        echo 'This command must be run from a Bazel module folder (missing BUILD.bazel).'
+        return 1
+    fi
+
+    local MODULE_NAME
+    MODULE_NAME=$(grep BUILD.bazel -e "^sfdc_core_module" -C1 | grep name | awk '{print $3}' | awk -F'"' '{print $2}')
+
+    local COMMAND="bazel test //${MODULE_NAME}:eslint_lwc --test_output=all"
+    echo -n "About to run '$COMMAND', Continue? (Y/n) "
+    read -r RESP
+    if [[ "$RESP" == 'n' ]] || [[ "$RESP" == 'N' ]]; then
+        echo 'Skipped.'
+        return 2
+    fi
+    eval "$COMMAND"
+}
+
 function coreeslintQuick() {
     # Note: this is using a hard-coded version of eslint-tool, need to run the non-quick way to update it
     [[ -z $1 ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
