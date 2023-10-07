@@ -73,3 +73,11 @@ alias noappnap='defaults write NSGlobalDomain NSAppSleepDisabled -bool YES'
 
 # XCode
 alias xi='xcode-select --install'
+
+function runJar() {
+    # Example JAR: target/o11y-processing-service.jar
+    # Processes the JSON log entries in stdout, and replaces the `\n` text with actual newlines
+    [[ -z $1 ]] && echo 'Usage: runJar <jarfile>' && return 1
+    [[ -z "$JAVA_HOME" ]] && echo 'JAVA_HOME is not set' && return 1
+    "$JAVA_HOME/bin/java" -jar "$1" | jq '.message' | sed s/\\\\n/\\n/g
+}

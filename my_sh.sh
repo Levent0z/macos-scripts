@@ -6,6 +6,7 @@ alias cd3='pushd ../../.. >/dev/null'
 alias cd4='pushd ../../../.. >/dev/null'
 alias cd5='pushd ../../../../.. >/dev/null'
 alias clearb='echo -n -e "\e[2J\e[3J\e[1;1H"' # clear screen and scroll buffer
+alias cpuspeed='pmset -g therm | grep CPU_Speed_Limit | cut -d" " -f3'
 alias codez='code ~/.zshrc'
 alias dateiso='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias dusage='du -sh *' # disk usage
@@ -119,6 +120,11 @@ function lsx() {
 
 function md() {
     mkdir -p "$1" && pushd "$1"
+}
+
+function of() {
+    # Show processes with top open files
+    lsof | awk '{print $1}' | sort | uniq -c | sort -rn | head
 }
 
 function sd() {

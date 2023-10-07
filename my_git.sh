@@ -109,12 +109,12 @@ function gitTheirs() {
     echo "$CONFLICTING"
     echo -n 'This will "accept theirs" and git add the above files. Are you sure? (y/N) '
     read RESP
-    [[ "$RESP" != 'y' ]] && echo 'Nothing done.' && return
+    [[ "$RESP" != 'y' ]] && [[ "$RESP" != 'Y' ]] && echo 'Nothing done.' && return
     echo "$CONFLICTING" | xargs git checkout --theirs
     echo "$CONFLICTING" | xargs git add
     echo -n 'Continue with rebase? (Y/n) '
     read RESP
-    [[ "$RESP" == 'n' ]] && echo 'Skipped.' && return
+    [[ "$RESP" == 'n' ]] || [[ "$RESP" == 'N' ]] && echo 'Skipped.' && return
     git rebase --continue
 }
 
@@ -139,4 +139,11 @@ function gcb() {
 
 function gpo() {
     git push -u origin $(git branch | grep '*' | cut -d ' ' -f2)
+}
+
+function gro() {
+    echo -n 'This will git restore all files in the current status (including untracked files). Are you sure? (y/N) '
+    read RESP
+    [[ "$RESP" != 'y' ]] && [[ "$RESP" != 'Y' ]] && echo 'Nothing done.' && return
+    git status --porcelain | awk -F' ' '{ print $2 }' | xargs git restore
 }

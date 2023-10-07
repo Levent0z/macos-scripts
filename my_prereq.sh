@@ -55,5 +55,6 @@ exists bat || Brew 'bat' 'bat: a cat clone with syntax highlighting'
 exists fzf || Brew 'fzf' 'fzf: Fuzzy finder'
 exists grcat || Brew 'grc' 'grc/grcat: Colorizer'
 exists termenu || installTermenu
+exists gh || Brew 'gh' 'gh: GitHub CLI'
 echo "Done!"
 exists notify && notify "Done!" "my_prereq.sh"
