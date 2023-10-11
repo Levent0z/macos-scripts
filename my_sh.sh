@@ -195,3 +195,9 @@ function scriptFolder() {
     local script_dir="$(cd "$(dirname "$0")" && pwd)"
     echo "$script_dir"
 }
+
+function dir() {
+    local DIR="$1"
+    [[ -z "$DIR" ]] && DIR="$PWD"
+    cat <(ls -hpoal "$DIR" | grep -e '^d' | sort -f -k 8) <(ls -hpoal "$DIR" | grep -v '^d' | sort -f -k 8) | grep -v '^total'
+}
