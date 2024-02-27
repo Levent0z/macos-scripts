@@ -1,6 +1,6 @@
 # This file contains values hardcoded for my own use.
 ID=$(whoami)
-if [[ "$ID" != "loz" ]] && [[ "$ID" != "leventoz" ]]; then
+if [[ "$ID" != "loz" ]] && [[ "$ID" != "leventoz" ]] && [[ "$SSO_USERNAME" != "loz" ]]; then
     echo "Do not use this script without modifications"
     return 1
 fi
