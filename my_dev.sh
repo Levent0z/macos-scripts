@@ -61,8 +61,8 @@ function npmrun() {
     done
 }
 
-# Self
-alias dox='pushd ~/github/levent0z/docsify'
+# Chrome
+alias nocert-chrome="pkill -x 'Google Chrome$' && sleep 2; open -a 'Google Chrome' --args --ignore-certificate-errors"
 
 # Volta
 export VOLTA_HOME="$HOME/.volta"
@@ -81,3 +81,6 @@ function runJar() {
     [[ -z "$JAVA_HOME" ]] && echo 'JAVA_HOME is not set' && return 1
     "$JAVA_HOME/bin/java" -jar "$1" | jq '.message' | sed s/\\\\n/\\n/g
 }
+
+
+

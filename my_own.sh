@@ -5,6 +5,8 @@ if [[ "$ID" != "loz" ]] && [[ "$ID" != "leventoz" ]]; then
     return 1
 fi
 
+alias dox='pushd ~/github/levent0z/docsify'
+
 FULLNAME='Levent Oz'
 DEVEMAIL='leventoz.dev@gmail.com'
 RSANAME='l0z_id_rsa'
@@ -28,8 +30,11 @@ function mountOznas() {
 }
 
 function sshOznas() {
-    [[ `hostname` == 'OZNAS' ]] && echo 'Already on oznas.' && exit 1
+    [[ $(hostname) == 'OZNAS' ]] && echo 'Already on oznas.' && exit 1
     ssh oznas -p 220
 }
 
 gitNoPager
+
+alias ozl='yarn --cwd "$HOME/github/levent0z/ozl" node --loader ts-node/esm index.ts'
+setcog

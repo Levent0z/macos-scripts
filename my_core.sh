@@ -72,8 +72,8 @@ alias pduia='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-api/java/src/ui/instr
 alias pduii='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-impl/java/src/ui/instrumentation/impl" >/dev/null'
 alias pdwr='$PD ~/.m2/repository/sfdc/ui/webruntime-framework >/dev/null'
 
-alias tailins='tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
-alias tailo11y='tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
+alias tailins='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
+alias tailo11y='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
 
 LOC=$(dirname "$0")
 
@@ -82,15 +82,15 @@ function myShelved() {
 }
 
 function appready() {
-    tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep "A P P    R E A D Y"
+    tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep "A P P    R E A D Y"
 }
 
 function appchanged() {
-    tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep "changed due to: CHANGE"
+    tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep "changed due to: CHANGE"
 }
 
 function corelogs() {
-    tail -f "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grcat "$LOC/config/conf.sfcore"
+    tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grcat "$LOC/config/conf.sfcore"
 }
 
 function coreCiStatus {
@@ -256,7 +256,7 @@ function logrt() {
         return 1
     fi
 
-    tail -f ~/cog/main/core/sfdc/logs/sfdc/output.log | grep -E "^$1"
+    tail -f --follow=name ~/cog/main/core/sfdc/logs/sfdc/output.log | grep -E "^$1"
 }
 
 # Reminder: `System.out.println` doesn't go onto output.log
@@ -266,7 +266,7 @@ function logwatch() {
         echo 'Please provide your keyword to filter as your first argument (escape spaces)'
         return 1
     fi
-    tail -f ~/cog/main/core/sfdc/logs/sfdc/output.log | grep -E "$1"
+    tail -f --follow=name ~/cog/main/core/sfdc/logs/sfdc/output.log | grep -E "$1"
 }
 
 function redirectCore() {
