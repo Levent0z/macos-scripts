@@ -4,7 +4,7 @@ alias nogpg='git config commit.gpgsign false'
 alias pdgithub='pushd ~/github'
 
 ## Use "gh prs" to show open PRs using GitHub CLI
-which gh >/dev/null && gh alias set myprs "api -X GET search/issues  -f q='is:open, author:$(whoami), is:pr' --jq '.items[].html_url'" >/dev/null
+which gh >/dev/null && gh alias set prs "api -X GET search/issues  -f q='is:open, author:$(whoami), is:pr' --jq '.items[].html_url'" --clobber >/dev/null
 
 function gl() {
     local LINES=10

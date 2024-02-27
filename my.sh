@@ -25,32 +25,32 @@ else
     MY_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 fi
 
-source "$MY_PATH/my_sh.sh"
-source "$MY_PATH/my_net.sh"
+function sourceScript() {
+    [[ "$DEBUG" == "true" ]] && echo "Source: $1"
+    ! source "$1" && [[ "$DEBUG" == "true" ]] && echo "Last source returned $?"
+}
 
-if which fzf >/dev/null
-then
-    source "$MY_PATH/my_fzf.sh"
+sourceScript "$MY_PATH/my_sh.sh"
+sourceScript "$MY_PATH/my_net.sh"
+
+if which fzf >/dev/null; then
+    sourceScript "$MY_PATH/my_fzf.sh"
 fi
 
-
-if which npm >/dev/null
-then
-    source "$MY_PATH/npmcompletion.sh"
+if which npm >/dev/null; then
+    sourceScript "$MY_PATH/npmcompletion.sh"
 fi
 
-source "$MY_PATH/my_git.sh"
-source "$MY_PATH/my_gh.sh"
-source "$MY_PATH/my_dev.sh"
+sourceScript "$MY_PATH/my_git.sh"
+sourceScript "$MY_PATH/my_gh.sh"
+sourceScript "$MY_PATH/my_dev.sh"
 
-if which corecli >/dev/null
-then
-    source "$MY_PATH/my_core.sh"
+if which corecli >/dev/null; then
+    sourceScript "$MY_PATH/my_core.sh"
 fi
 
-if [[ -d "$HOME/git" ]]
-then
-    source "$MY_PATH/my_soma.sh"
+if [[ -d "$HOME/git" ]]; then
+    sourceScript "$MY_PATH/my_soma.sh"
 fi
 
-source "$MY_PATH/my_own.sh"
+sourceScript "$MY_PATH/my_own.sh"
