@@ -27,7 +27,10 @@ fi
 
 function sourceScript() {
     [[ "$DEBUG" == "true" ]] && echo "Source: $1"
-    ! source "$1" && [[ "$DEBUG" == "true" ]] && echo "Last source returned $?"
+    source "$1"
+    if [[ $? != 0 ]] && [[ "$DEBUG" == "true" ]]; then
+        echo "Last source returned $?"
+    fi
 }
 
 sourceScript "$MY_PATH/my_sh.sh"
