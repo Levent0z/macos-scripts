@@ -19,6 +19,8 @@ alias cogd='GITSFDC_TRACE=1 git sfdc' # debug
 function setcog() {
     if [[ -n "$PROJECT_PATH" ]]; then
         export CORE="$PROJECT_PATH"
+    elif [[ -n "$CORE_PROJECT_PATH" ]]; then
+        export CORE="$CORE_PROJECT_PATH"
     else
         export CORE="$DEFAULTCORE"
     fi
