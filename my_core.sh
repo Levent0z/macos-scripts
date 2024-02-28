@@ -364,3 +364,9 @@ function cogClone() {
 
     git sfdc clone -b $1 -n $2
 }
+
+function sfwConnect() {
+    [[ -z "$1" ]] && echo 'Please specify the workspace ID' && return 1
+    sfworkctl connect --document "" -w $1
+    # initialization logs are at /var/log/user-data.log
+}
