@@ -21,6 +21,8 @@ function setcog() {
         export CORE="$PROJECT_PATH"
     elif [[ -n "$CORE_PROJECT_PATH" ]]; then
         export CORE="$CORE_PROJECT_PATH"
+    elif [[ "$USER" == 'sfwork' ]]; then
+        export CORE='/opt/workspace/core-public/core'
     else
         export CORE="$DEFAULTCORE"
     fi
