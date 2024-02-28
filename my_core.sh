@@ -1,4 +1,4 @@
-export DEFAULTCORE=$HOME/cog/main/core
+export DEFAULTCORE="$HOME/cog/main/core"
 export PD=$(which pd >/dev/null && echo 'pd' || echo 'pushd')
 
 # Build inside a module
@@ -16,9 +16,15 @@ alias cv='corecli ide:vscode'
 # Core-on-Git
 alias cog='git sfdc'
 alias cogd='GITSFDC_TRACE=1 git sfdc' # debug
-alias setcog='export CORE=~/cog/main/core'
-alias setcog246='export CORE=~/cog/246-patch/core'
-alias setblt='export CORE=~/blt/app/main/core'
+function setcog() {
+    if [[ -n "$PROJECT_PATH" ]]; then
+        export CORE="$PROJECT_PATH"
+    else
+        export CORE="$DEFAULTCORE"
+    fi
+}
+
+alias setblt="export CORE='$HOME/blt/app/main/core'"
 
 # Aura
 alias ax='node ./aura-util/src/test/tools/xUnit/xUnit.js.Console.js /dependency:./aura-util/src/test/tools/xUnit/dependencies ./aura-impl/src/test/javascript' #run this from the root aura folder:
