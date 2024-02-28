@@ -367,6 +367,7 @@ function cogClone() {
 
 function sfwConnect() {
     [[ -z "$1" ]] && echo 'Please specify the workspace ID' && return 1
+    echo 'Reminder to view logs: cat /var/log/user-data.log'
     sfworkctl connect --document "" -w $1
-    # initialization logs are at /var/log/user-data.log
+
 }
