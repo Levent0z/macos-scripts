@@ -371,3 +371,37 @@ function sfwConnect() {
     sfworkctl connect --document "" -w $1
 
 }
+
+function fixGraphExecutionServiceClientStatisticsIssue() {
+    # https://salesforce.stackenterprise.co/questions/27078
+    sudo chmod +r /etc/pki_service/sfdc/client/keys
+}
+
+function echoGitBranchesOnSfw() {
+    echo 'Run the following after connecting to SFW using sfwConnect:'
+    echo 'find /opt/workspace/core-public/.git/refs/heads -type f | cut -d"/" -f8-'
+}
+
+function bazelXUnit() {
+    [[ -z "$1" ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
+    bazel test "//$1:xunit_test" --test_output=all
+}
+
+function bazelJest() {
+    [[ -z "$1" ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
+    bazel test "//$1:jest_test --test_output=all"
+}
+
+function bazelJunit() {
+    [[ -z "$1" ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
+    bazel test "//$1/test/unit:junit_manual"
+}
+
+function bazelEslint() {
+    [[ -z "$1" ]] && echo 'Please specify the module name, e.g. ui-instrumentation-components' && return 1
+    bazel test "//$1:eslint_lwc --test_output=all"
+}
+
+function highlightFirstTokenBlue() {
+    awk -F'`' '{if (NF > 1 && length($1) <= 5) printf "\033[37;41m%s\033[0m", $1; else printf "%s", $1; for(i=2; i<=NF; i++) printf " %s", $i; print ""}'
+}
