@@ -3,6 +3,10 @@ alias gs='git status'
 alias nogpg='git config commit.gpgsign false'
 alias pdgithub='pushd ~/github'
 
+## Git list branche names in origin or upstream
+alias glbo='git ls-remote --heads origin | cut -d / -f 3'
+alias glbu='git ls-remote --heads upstream | cut -d / -f 3'
+
 ## Use "gh prs" to show open PRs using GitHub CLI
 which gh >/dev/null && ! (gh alias list | grep -E '^prs:' >/dev/null) && gh alias set prs "api -X GET search/issues  -f q='is:open, author:$(whoami), is:pr' --jq '.items[].html_url'" >/dev/null
 

@@ -82,8 +82,9 @@ alias pduia='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-api/java/src/ui/instr
 alias pduii='$PD "${CORE:-$DEFAULTCORE}/ui-instrumentation-impl/java/src/ui/instrumentation/impl" >/dev/null'
 alias pdwr='$PD ~/.m2/repository/sfdc/ui/webruntime-framework >/dev/null'
 
-alias tailins='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml|ailtn|aiuim|cptsk)"'
-alias tailo11y='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|3pcml)|ui-telemetry|o11y"'
+alias tailins='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|uxnvt|uxrst|3pcml|ailtn|aiuim)"'
+alias tailo11y='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|uxnvt|uxrst|3pcml)"'
+alias tailo11yx='tail -f --follow=name "${CORE:-$DEFAULTCORE}/sfdc/logs/sfdc/output.log" | grep -E "^(uxlog|uxact|uxerr|uxevt|uxnvt|uxrst|3pcml)|ui-telemetry|o11y"'
 
 LOC=$(dirname "$0")
 
@@ -402,6 +403,11 @@ function bazelEslint() {
     bazel test "//$1:eslint_lwc --test_output=all"
 }
 
-function highlightFirstTokenBlue() {
+function highlightFirstToken() {
     awk -F'`' '{if (NF > 1 && length($1) <= 5) printf "\033[37;41m%s\033[0m", $1; else printf "%s", $1; for(i=2; i<=NF; i++) printf " %s", $i; print ""}'
+}
+
+function gitSfdcUpdate() {
+    git sfdc upgrade
+    ## You can also run the following to enable automatic update:  git sfdc setup-automaint
 }
