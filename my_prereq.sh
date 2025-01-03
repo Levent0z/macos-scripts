@@ -15,7 +15,7 @@ function exists() {
 }
 
 function installBrew() {
-    echo -n 'Install Brew (macos package loader)? (y/n) '
+    printf 'Install Brew (macos package loader)? (y/n) '
     read RESP
     [[ "$RESP" != 'y' ]] && return
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -23,16 +23,18 @@ function installBrew() {
 }
 
 function installNotify() {
-    echo 'Install notify: a simple script to do notifications? (y/n) '
+    printf 'Install notify: a simple script to do notifications? (y/n) '
     read RESP
     [[ "$RESP" != 'y' ]] && return
 
-    cp "$LOC/notify" /usr/local/bin/
+    echo 'We need sudo access to create /usr/local/bin (if needed) and copy the binary there'.
+    sudo mkdir -p /usr/local/bin
+    sudo cp "$LOC/notify" /usr/local/bin/
     exitIfFailed
 }
 
 function installTermenu() {
-    echo 'Install termenu: a CLI helper to enable choices? (y/n) '
+    printf 'Install termenu: a CLI helper to enable choices? (y/n) '
     read RESP
     [[ "$RESP" != 'y' ]] && return
     pip3 install termenu
@@ -42,7 +44,7 @@ function Brew() {
     NAME=$1
     LABEL=$2
     [[ "$LABEL" == "" ]] && LABEL=$NAME
-    echo -n "Install $LABEL? (y/n) "
+    printf "Install $LABEL? (y/n) "
     read RESP
     [[ "$RESP" != 'y' ]] && return
     brew install "$NAME"
