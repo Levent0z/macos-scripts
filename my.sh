@@ -56,4 +56,9 @@ if [[ -d "$HOME/git" ]]; then
     sourceScript "$MY_PATH/my_soma.sh"
 fi
 
+if [[ -s "$HOME/bitbucket" ]]; then 
+    sourceScript "$MY_PATH/my_oci.sh"
+    sourceScript "$MY_PATH/my_ohai.sh"
+fi
+
 sourceScript "$MY_PATH/my_own.sh"

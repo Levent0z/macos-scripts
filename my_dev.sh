@@ -30,6 +30,11 @@ alias m2360="export M2_HOME='$HOME/sdk/apache-maven-3.6.0'"
 alias m2362="export M2_HOME='$HOME/sdk/apache-maven-3.6.2'"
 alias mvnp='mvn clean package'
 alias mvni='mvn install -DskipUnitTests=true -DskipJsDoc'
+alias mvnnot='mvn install -DskipTests'              # compile the tests but skip executing them. (`-DskipTests` is recognized by the Surefire plugin.)
+alias mvnskipt='mvn install -Dmaven.test.skip=true' # completely skip compiling and executing tests
+# mvn clean install -DskipTests # this worked
+alias mvnx='mvn install -DskipUnitTests=true -DskipJsDoc -DskipTests -Dmaven.test.skip=true' # just add all parameters whichever is used
+alias mvns='mvn spotless:apply'
 
 function mvnGet() {
     local REPO=$1       #e.g. https://phx-nexus-proxy.internal.salesforce.com
@@ -81,6 +86,3 @@ function runJar() {
     [[ -z "$JAVA_HOME" ]] && echo 'JAVA_HOME is not set' && return 1
     "$JAVA_HOME/bin/java" -jar "$1" | jq '.message' | sed s/\\\\n/\\n/g
 }
-
-
-

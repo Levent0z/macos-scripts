@@ -1,6 +1,5 @@
 MY_GIT_ORG="$HOME/git/loz"
 
-alias pdmy="pushd $MY_GIT_ORG"
 alias pdsoma="pushd $HOME/git"
 
 alias pdgater="pushd $MY_GIT_ORG/sfdc-bazel/projects/services/gater"

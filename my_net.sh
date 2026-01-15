@@ -46,3 +46,7 @@ SUFFIX=$(hostname | cut -d'.' -f1)
 export SSHARGS="-i $HOME/.ssh/id_rsa_$SUFFIX -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=QUIET"
 alias scpx="scp $SSHARGS"
 alias sshi="ssh -i $SSHARGS" # Specify hostname (FQDN) when calling
+
+
+# Launch Chrome without web security
+alias nocors='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --disable-web-security --user-data-dir="/tmp"'

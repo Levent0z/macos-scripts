@@ -16,6 +16,7 @@ alias lx='script -q /dev/null ls -pGA1 | sort -bf' # maintain colors, use 1 colu
 alias ps0=$PS1
 alias ps1='PS1="\n\[\e[1;37m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]\$(git_branch_text)\n\[\e[1;36m\]o>\[\e[0;37m\]"'
 alias ps2='PS1="\n\[\e[0;33m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]$(git_branch_text)\n\[\e[1;36m\]o>\[\e[0;0m\]"'
+alias psz='PS1="%n@%m %2~ %# "'
 alias sbp='source ~/.bash_profile'
 alias therm='pmset -g thermlog'
 alias wrapoff='tput rmam' #word-wrap disable
@@ -79,6 +80,11 @@ function exitIfFailed() {
 
 function findstr() {
     grep -r "$1" .
+}
+
+# lists only the filenames and row numbers
+function findf() {
+    grep -rHn "$1" | cut -d: -f1,2
 }
 
 function findstrf() {

@@ -38,3 +38,7 @@ gitNoPager
 
 alias ozl='yarn --cwd "$HOME/github/levent0z/ozl" node --loader ts-node/esm index.ts'
 #setcog
+
+alias pdmy='pushd "$HOME/bitbucket/loz"'
+
+psz

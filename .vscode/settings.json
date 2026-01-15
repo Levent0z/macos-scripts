@@ -1,8 +1,11 @@
 {
     "window.title": "macos-scripts",
     "workbench.colorCustomizations": {
-        "titleBar.activeBackground": "#6fde65",
+        "titleBar.activeBackground": "#2f781b",
+        "titleBar.activeForeground": "#FFFFFF",
         "activityBar.background": "#2f781b",
-        "titleBar.activeForeground": "#000000"        
-    }
+        "sideBar.background": "#1f4f12",
+        "panel.background": "#13300b", 
+    },
+    "favorites.currentGroup": "Default"
 }
