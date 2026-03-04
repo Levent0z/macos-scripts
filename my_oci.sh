@@ -130,7 +130,7 @@ function sgfo() {
 }
 
 
-function srepos() {
+function scm-repos() {
     # Assumes the following has been run
     # oci session authenticate --region us-phoenix-1 --profile-name DEFAULT --tenancy-name bmc_operator_accesss
 
@@ -138,6 +138,68 @@ function srepos() {
     local PROFILE='DEFAULT'
     local OHAI_CLINICAL_PROJECT_ID='ocid1.devopsproject.oc1.phx.amaaaaaaw4vcxbyajigjxw7wlnhgturi5657fi6yi2m3u44s3gvxwyy7zpfa' 
     local PROJECT_ID="$OHAI_CLINICAL_PROJECT_ID"
-    oci devops repository list --project-id "$PROJECT_ID" --config-file "$CONFIG_FILE" --profile "$PROFILE" --auth security_token --output json --all | jq '.data.items[].name' | sort
+    oci devops repository list --project-id "$PROJECT_ID" --config-file "$CONFIG_FILE" --profile "$PROFILE" --auth security_token --output json --all | jq -r '.data.items[].name' | sort
+
+    # To filter output, you can do for example:
+    # scm-repos | grep -E -- '-ui$'
+}
+
+function scm-clone() {
+    if [[ -z "$1" ]]; then
+        echo 'Please provide project name (e.g. OHAI_CLINICAL, ODA, ...) as the first argument'
+        return 1
+    fi
+    if [[ -z "$2" ]]; then
+        echo 'Please provide repo name (e.g. cdaf-mobile-ui, ...) as the second argument'
+        return 1
+    fi
+
+    git clone "ssh://oci.private.devops.scmservice.us-phoenix-1.oci.oracleiaas.com/namespaces/axuxirvibvvo/projects/$1/repositories/$2"
+}
+
+
+function scm-clone-ui-repos() {
+    if [[ -z "$1" ]]; then
+        echo 'Please provide project name (e.g. OHAI_CLINICAL, ODA, ...) as the first argument'
+        return 1
+    fi
+
+    local project="$1"
+
+    scm-repos | grep -E -- '-ui$' | head -1 | while IFS= read -r repo; do
+        [[ -z "$repo" ]] || [[ -d "$repo" ]] && echo "Skipping $repo" && continue
+        scm-clone "$project" "$repo"
+    done
+}
+
+function scm-list() {
+    # 1) Find compartment OCID by name (under SCM tenancy)
+    COMPARTMENT_OCID=$(oci iam compartment list \
+        --compartment-id ocid1.tenancy.oc1..aaaaaaaatijo7l7dopcq6ngvl6q3bmlc2p7tsmro6tg5bhzfehkz5im7cuaa \
+        --compartment-id-in-subtree true \
+        --all \
+        --query "data[?name=='ohai_clinical'] | [0].id" \
+        --region us-phoenix-1 \
+        --profile default \
+        --auth security_token)
+    echo "Compartment OCID: $COMPARTMENT_OCID"
+
+    # 2) Find DevOps project OCID by name in that compartment
+    DEVOPS_PROJECT_ID=$(oci devops project list \
+        --compartment-id "$COMPARTMENT_OCID" \
+        --all \
+        --query "data[?\"name\"=='OHAI_CLINICAL'].id | [0]" \
+        --region us-phoenix-1 \
+        --profile default \
+        --auth security_token)
+    echo "DevOps Project OCID: $DEVOPS_PROJECT_ID"
+
+    # 3) List repositories for that project
+    oci devops repository list \
+        --project-id "$DEVOPS_PROJECT_ID" \
+        --all \
+        --region us-phoenix-1 \
+        --profile default \
+        --auth security_token
 }
 

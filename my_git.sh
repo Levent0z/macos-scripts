@@ -1,5 +1,8 @@
 alias gb='git branch --show-current'
 alias gs='git status'
+alias grv='git remote -v'
+alias gbv='git branch -v'
+alias gbv='git branch -vr'
 alias nogpg='git config commit.gpgsign false'
 alias pdgithub='pushd ~/github'
 

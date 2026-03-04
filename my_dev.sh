@@ -46,8 +46,10 @@ function mvnGet() {
 
 # NPM
 alias npmg='npm list -g --depth 0'                              # List globally installed packages
+alias npmgl='npm list -g --depth=0 --link=true'                 # Show globally linked packages
 alias yarnlinklist='ll -R ~/.config/yarn/link'                  # List linked packages recursively
 alias yarnlinked='find node_modules -type l | grep -v "/.bin/"' # Show linked folders except for those that contain .bin in the path
+alias scripts='cat package.json | jq ".scripts | to_entries | sort_by(.key) | from_entries"'  # List scripts
 
 function buildLoop() {
     # Watch src folder, build on changes
@@ -86,3 +88,6 @@ function runJar() {
     [[ -z "$JAVA_HOME" ]] && echo 'JAVA_HOME is not set' && return 1
     "$JAVA_HOME/bin/java" -jar "$1" | jq '.message' | sed s/\\\\n/\\n/g
 }
+
+
+alias backup='/Users/loz/bitbucket/loz/playground/packages/backup/backup.sh'
