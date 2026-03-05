@@ -130,9 +130,8 @@ function sgfo() {
 }
 
 
-function scm-repos() {
-    # Assumes the following has been run
-    # oci session authenticate --region us-phoenix-1 --profile-name DEFAULT --tenancy-name bmc_operator_accesss
+function scm-repos() {   
+    oci-refresh-phx
 
     local CONFIG_FILE="$HOME/.oci/config"
     local PROFILE='DEFAULT'
