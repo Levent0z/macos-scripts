@@ -18,6 +18,9 @@ function gl() {
     [[ -z $1 ]] || LINES=$1
     git log --pretty=format:"%h%x09%an%x09%ad%x09%s" --date=iso -n$LINES
 }
+## oh-my-zsh github plugin defines gl, so we need to unalias it first if it is defined
+unalias gl 2>/dev/null
+
 
 function glo() {
     local LINES=10
