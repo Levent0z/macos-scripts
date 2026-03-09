@@ -42,3 +42,27 @@ alias ozl='yarn --cwd "$HOME/github/levent0z/ozl" node --loader ts-node/esm inde
 alias pdmy='pushd "$HOME/bitbucket/loz"'
 
 psz
+
+function renamePdfs() {
+    echo -n "This will rename all PDF files in the current directory. Do you want to continue? (y/n) "
+    read -r REPLY
+            
+    echo    # move to a new line
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Operation cancelled."
+        return 1
+    fi
+
+    # get count of PDF files
+    pdf_count=$(ls -1 *.pdf 2>/dev/null | wc -l | tr -d ' ')
+    
+    # Iterate through all PDF files in the current directory
+    for file in *.pdf; do
+        if [[ -f "$file" ]]; then
+            echo "Processing: $file ($((pdf_count--)) remaining...)"
+            /Users/leventoz/github/levent0z/rename-pdf/rename-pdf.mjs "$file"
+        else
+            echo "No PDF files found in the current directory."
+        fi
+    done    
+}
