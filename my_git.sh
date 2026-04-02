@@ -6,7 +6,7 @@ alias gbv='git branch -vr'
 alias nogpg='git config commit.gpgsign false'
 alias pdgithub='pushd ~/github'
 
-## Git list branche names in origin or upstream
+## Git list branch names in origin or upstream
 alias glbo='git ls-remote --heads origin | cut -d / -f 3'
 alias glbu='git ls-remote --heads upstream | cut -d / -f 3'
 
@@ -37,6 +37,18 @@ function gfu() {
 function gfo() {
     git checkout master && git fetch origin && git rebase origin/master
 }
+
+## Git Fetch Origin (develop)
+function gfod() {
+    git checkout develop && git fetch origin && git rebase origin/develop
+}
+
+
+## Git rebase Origin/develop
+function grod() {
+    git rebase origin/develop
+}
+
 
 ## Git Remote Add
 function gra() {

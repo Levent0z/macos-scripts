@@ -1,3 +1,5 @@
+#! /bin/env/bash
+
 alias bp='code ~/.bash_profile'
 alias cd..='cd ..'
 alias cd1='pushd .. >/dev/null'
@@ -10,6 +12,8 @@ alias cpuspeed='pmset -g therm | grep CPU_Speed_Limit | cut -d" " -f3'
 alias codez='code ~/.zshrc'
 alias dateiso='date -u +"%Y-%m-%dT%H:%M:%SZ"'
 alias dusage='du -sh *' # disk usage
+alias dfree='df -h .' # disk available free space 
+alias foldersizes='find . -mindepth 1 -maxdepth 1 -type d -print0 | xargs -0 du -sh'
 alias ll='ls -hpGoAtr'  # -h: use units for sizes; -p: /-suffix for folders; -G: colorized; -o: list, but group ID omitted; -A: all entries except . and ..; -t: sort on time; -r: reverse sort
 #Also see lsx function below
 alias lx='script -q /dev/null ls -pGA1 | sort -bf' # maintain colors, use 1 column, sort case-insensitively (colors needed to sort inside groups: executables, folders, links, files)
