@@ -22,7 +22,9 @@ alias ps1='PS1="\n\[\e[1;37m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]\$(gi
 alias ps2='PS1="\n\[\e[0;33m\]\t \[\e[1;33m\]\h \[\e[1;36m\]\w \[\e[1;31m\]$(git_branch_text)\n\[\e[1;36m\]o>\[\e[0;0m\]"'
 alias psz='PS1="%n@%m %2~ %# "'
 alias sbp='source ~/.bash_profile'
+alias sysInfo='system_profiler'
 alias therm='pmset -g thermlog'
+alias videoCount="find . -type f \( -iname '*.mov' -o -iname '*.mp4' -o -iname '*.m4v' -o -iname '*.avi' -o -iname '*.mts' -o -iname '*.m2ts' -o -iname '*.3gp' -o -iname '*.hevc' -o -iname '*.mpeg' -o -iname '*.mpg' \) | wc -l"
 alias wrapoff='tput rmam' #word-wrap disable
 alias wrapon='tput smam'  #word-wrap enable
 
