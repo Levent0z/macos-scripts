@@ -213,3 +213,11 @@ function dir() {
     [[ -z "$DIR" ]] && DIR="$PWD"
     cat <(ls -hpoal "$DIR" | grep -e '^d' | sort -f -k 8) <(ls -hpoal "$DIR" | grep -v '^d' | sort -f -k 8) | grep -v '^total'
 }
+
+function print_empty_dirs() {
+    find . -depth -type d -empty -print
+}
+
+function remove_empty_dirs() {
+    find . -depth -type d -empty -delete
+}
