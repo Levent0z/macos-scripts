@@ -49,11 +49,44 @@ function grod() {
     git rebase origin/develop
 }
 
+## Git add workspace for existing branch
+function gaw() {
+    if [ -z "$1" ]; then
+        echo "Please provide existing branch name (don't specify origin)"
+        return 1
+    fi
+    local LOCALDIR
+    LOCALDIR=$(basename "$PWD")
+    local TARGET="../${LOCALDIR}__$1"
+        
+    git worktree add "$TARGET" "origin/$1" && cd "$TARGET" || return 1
+}
+
+## Git add workspace for new branch
+function gnaw() {
+    if [ -z "$1" ]; then
+        echo 'Please provide new branch name, which will also be the name of the folder'
+        return 1
+    fi
+        
+    git worktree add -b "$1" "../$1" && cd "../$1" || return 1
+}
+
+
+
+## git remove workspace folder
+function grw() {
+    if [ -z "$1" ]; then
+        echo "Please provide name of worktree folder to remove. Assumes it's a sibling to the current original folder"
+        return 1
+    fi
+    git worktree remove "../$1"
+}
 
 ## Git Remote Add
 function gra() {
     # Git remote add upstream, assuming fetch and push URLs are the same for "origin"
-    if [ -z $1 ]; then
+    if [ -z "$1" ]; then
         echo 'Please provide the upstream repo org name'
         return 1
     fi

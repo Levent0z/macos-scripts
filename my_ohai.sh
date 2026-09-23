@@ -8,3 +8,5 @@ alias ohai-which="alias | grep -E '^ohai'"
 alias ohai-auth='~/dev/ohai_clinical/nursing-service/scripts/getAuthToken.sh'
 
 alias standup='pushd "$HOME/bitbucket/loz/playground/packages/randomize" >/dev/null  && (cat team.txt | ./randomize.js $(date -u +"%Y%m%d")); popd >/dev/null'
+
+alias nui='pushd "$HOME/dev/ohai_clinical/nursing-ui"'
