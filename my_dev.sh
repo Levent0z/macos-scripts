@@ -91,3 +91,12 @@ function runJar() {
 
 
 alias backup='/Users/loz/bitbucket/loz/playground/packages/backup/backup.sh'
+
+
+function cq() {
+    local tmp
+    tmp=$(mktemp -d)
+    cp ~/.codex/auth.json "$tmp/"
+    CODEX_HOME="$tmp" codex exec --ephemeral "$@"
+    rm -rf "$tmp"
+}

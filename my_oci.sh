@@ -10,6 +10,9 @@ alias dev='cd ~/dev/ohai_clinical'
 
 alias oci-login-iad="oci session authenticate --region us-ashburn-1 --profile-name default --tenancy-name bmc_operator_access"
 alias oci-login-phx="oci session authenticate --region us-phoenix-1 --profile-name default --tenancy-name bmc_operator_access"
+alias oci-login-IAD="oci session authenticate --region us-ashburn-1 --profile-name DEFAULT --tenancy-name bmc_operator_access"
+alias oci-login-PHX="oci session authenticate --region us-phoenix-1 --profile-name DEFAULT --tenancy-name bmc_operator_access"
+
 
 alias oci-login-iad-oc1="oci session authenticate --region us-ashburn-1 --profile-name oc1 --tenancy-name bmc_operator_access"
 alias oci-login-phx-oc1="oci session authenticate --region us-phoenix-1 --profile-name oc1 --tenancy-name bmc_operator_access"
@@ -17,13 +20,45 @@ alias oci-login-phx-oc1="oci session authenticate --region us-phoenix-1 --profil
 # Use this for devops-ui-service development
 alias oci-refresh-iad="oci session refresh --profile default || oci-login-iad"
 alias oci-refresh-phx="oci session refresh --profile default || oci-login-phx"
+alias oci-refresh-IAD="oci session refresh --profile DEFAULT || oci-login-iad"
+alias oci-refresh-PHX="oci session refresh --profile DEFAULT || oci-login-phx"
 alias oci-refresh-iad-oc1="oci session refresh --profile oc1 || oci-login-iad-oc1"
 alias oci-refresh-phx-oc1="oci session refresh --profile oc1 || oci-login-phx-oc1"
+
+function oci-login() {
+    if [[ -z "$1" ]]; then 
+        echo 'Please provide the session name optionally followed by a region  (e.g. us-ashburn-1, default: us-phoenix-1)'
+        return 1
+    fi
+
+    local PROFILE="$1"
+    local REGION="${2:-us-phoenix-1}"
+
+    if ! oci session refresh --profile "$PROFILE"; then 
+        oci session authenticate --region "$REGION" --profile-name "$PROFILE" --tenancy-name bmc_operator_access
+    fi
+}
+
+function oci-list-comments() {
+    if [[ -z "$1" ]]; then 
+        echo 'Please provide the pull request ID (e.g. ocid1.devopspullrequest.....)'
+        return 1
+    fi
+
+    local PR_ID="$1"
+
+    # This will automatically try to refresh the "CLI" profile
+    oci devops pull-request-comment list-pull-request-comments --pull-request-id "$PR_ID" --all  --auth security_token
+}
 
 alias oci-int="oci -i --config-file '~/.oci/config' --profile default --auth security_token"
 
 alias oci-token="ssh operator-access-token.svc.ad1.r2 'generate --mode jwt'"
 alias oci-token-copy="ssh operator-access-token.svc.ad1.r2 'generate --mode jwt' | pbcopy"
+
+## python -m pip install pyhocon
+## This won’t catch missing or broken substitutions. You can specify them as env variables and remove "resolve=False"
+alias oci-validate-build='python -c "from pyhocon import ConfigFactory; ConfigFactory.parse_file(\"ocibuild.conf\", resolve=False); print(\"HOCON OK\")"'
 
 ## Bastion URL format "bastion-{ad}.rb.{region}.{oci_iaas_domain_name}"
 

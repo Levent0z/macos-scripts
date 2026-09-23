@@ -43,6 +43,11 @@ function gfod() {
     git checkout develop && git fetch origin && git rebase origin/develop
 }
 
+## Git Fetch Origin (main)
+function gfom() {
+    git checkout main && git fetch origin && git rebase origin/main
+}
+
 
 ## Git rebase Origin/develop
 function grod() {
@@ -201,4 +206,8 @@ function gro() {
     read RESP
     [[ "$RESP" != 'y' ]] && [[ "$RESP" != 'Y' ]] && echo 'Nothing done.' && return
     git status --porcelain | awk -F' ' '{ print $2 }' | xargs git restore
+}
+
+function tags26() {
+    git tag --merged HEAD --list '26.[0-9][0-9].*' --sort=-version:refname | head -n 1
 }
